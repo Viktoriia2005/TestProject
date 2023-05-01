@@ -1,0 +1,18 @@
+<html>
+<script>
+  function content2() {
+    let pStr = '';
+    let olStr = '<ol>';
+    for (let i = 1; i <= 3; i++) {
+      const fio = prompt("Введіть прізвище та ім'я людини");
+      pStr += `<p>${fio}</p>`;
+      olStr += `<li>${fio}</li>`;
+    }
+    olStr += '</ol>';
+    document.write(pStr);
+    document.write(olStr);
+  }
+  content2();
+</script>
+
+</html>
