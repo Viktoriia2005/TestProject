@@ -1,0 +1,27 @@
+<html>
+<script>
+  function oneBuyThings(sum) {
+    return sum / (1 + 5 * 1 + 5 * 5);
+  }
+  let res1 = oneBuyThings(24.80);
+  let res2 = oneBuyThings(319.30);
+  document.write(`<p>Одна людина купила на суму ${res1} грн, друга - на ${res1 * 5} грн, третя - на ${res1 * 25} грн.</p>`);
+  document.write(`<p>Одна людина купила на суму ${res2} грн, друга - на ${res2 * 5} грн, третя - на ${res2 * 25} грн.</p>`);
+
+  function buyThings(sum, currency = 'грн') {
+    let first = sum / 31;
+    let second = 5 * first;
+    let third = 5 * second;
+    return { first, second, third };
+  }
+  let res3 = buyThings(319.30);
+  console.log(res3); //{first: 10.3, second: 51.5, third: 257.5}
+  document.write("<h2>Покупка декількох людей (Повернення об'єкта з функції)</h2>");
+  document.write(`<p>Одна людина купила на суму ${res3.first}, друга - на суму - ${res3.second} грн., третя витратила ${res3.third}грн.</p>`);
+
+  let res4 = buyThings(186);
+  console.log(res4); //{first: 6, second: 30, third: 150}
+  document.write(`<p>Одна людина купила на суму ${res4.first} грн., друга - на суму - ${res4.second} грн., третя витратила ${res4.third} грн.</p>`);
+</script>
+
+</html>
