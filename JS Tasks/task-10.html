@@ -1,19 +1,30 @@
 <html>
 <script>
-    let number = prompt("Введіть чотиризначне число:");
-    let product = 1;
-    let sum = 0;
+    let number;
+    do {
+        number = prompt("Введіть чотиризначне число:");
+    } while (isNaN(number) || number.length !== 4);
 
-    if (number % 2 === 0) {
-        for (let i = 0; i < number.length; i++) {
-            product *= parseInt(number[i]);
+    let digits = number.split("");
+    let even = true;
+    let sum = 0;
+    let product = 1;
+    for (let i = 0; i < digits.length; i++) {
+        let digit = parseInt(digits[i]);
+        if (isNaN(digit)) {
+            console.log("Помилка: " + digits[i] + " не є цифрою");
+            break;
         }
-        console.log("Число " + number + " парне. Добуток його чисел дорівнює " + product);
+        if (digit % 2 !== 0) {
+            even = false;
+        }
+        sum += digit;
+        product *= digit;
+    }
+    if (even) {
+        console.log("Цифра " + number + " парне. Добуток його чисел дорівнює " + product);
     } else {
-        for (let i = 0; i < number.length; i++) {
-            sum += parseInt(number[i]);
-        }
-        console.log("Число " + number + " непарне. Сума його чисел дорівнює " + sum);
+        console.log("Цифра " + number + " непарне. Сума його чисел дорівнює " + sum);
     }
 </script>
 

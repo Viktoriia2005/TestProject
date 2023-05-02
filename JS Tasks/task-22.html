@@ -1,0 +1,38 @@
+<html>
+<script>
+  const numbers = [];
+  for (let i = 0; i < 20; i++) {
+    numbers.push(Math.floor(Math.random() * 100) + 1);
+  }
+  console.log(numbers);
+
+  console.log("Всі парні числа:");
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+      console.log(numbers[i]);
+    }
+  }
+
+  console.log("Всі числа, які діляться на 3:");
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 3 === 0) {
+      console.log(numbers[i]);
+    }
+  }
+
+  console.log("Всі числа, які діляться на 5:");
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 5 === 0) {
+      console.log(numbers[i]);
+    }
+  }
+
+  console.log("Всі числа, які діляться на 10:");
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 10 === 0) {
+      console.log(numbers[i]);
+    }
+  }
+</script>
+
+</html>

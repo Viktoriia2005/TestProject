@@ -1,0 +1,25 @@
+<html>
+<script>
+  let group1 = ["Агеев", "Дмитренко", "Иванов", "Семенов", "Шаповалов"];
+  document.write("<ol start='0'>");
+  document.write("<li>" + group1.join(", ") + "</li>");
+
+  group1.unshift("Березина");
+  document.write("<li>" + group1.join(", ") + "</li>");
+
+  group1.push("Ященко");
+  document.write("<li>" + group1.join(", ") + "</li>");
+
+  group1.splice(4, 1, "Ковалева", "Горобченко");
+  document.write("<li>" + group1.join(", ") + "</li>");
+
+  let group2 = ["Филонов", "Изюмов", "Кабанов", "Дюдарев"];
+  let allGroups = group1.concat(group2);
+  document.write("<li>" + allGroups.join(", ") + "</li>");
+
+  allGroups.sort();
+  document.write("<li>" + allGroups.join(", ") + "</li>");
+  document.write("</ol>");
+</script>
+
+</html>

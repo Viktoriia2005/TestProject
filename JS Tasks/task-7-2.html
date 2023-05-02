@@ -1,8 +1,8 @@
 <html>
 <script>
-    let name = prompt("Введіть Ваше ім'я");
-    let yearOfBirth = prompt("Введіть рік Вашого народження");
-    let age = new Date().getFullYear() - yearOfBirth;
+    const name = prompt("Введіть Ваше ім'я");
+    const yearOfBirth = prompt("Введіть рік Вашого народження");
+    const age = new Date().getFullYear() - yearOfBirth;
     let ageString = name + ": " + age;
     if (age % 10 === 1) {
         ageString += " рік";

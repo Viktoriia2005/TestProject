@@ -1,15 +1,14 @@
 <html>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
   function calculateSalary() {
-    var salary = parseFloat(document.getElementById("salary").value);
-    var bonus = salary * 0.15;
-    var total = salary + bonus;
-    var tax = total * 0.1;
-    var remaining = total - tax - 190;
-    var result = remaining / 2;
-    // document.getElementById("result").innerHTML = "Ви отримаєте " + result + " грошей.";
-    alert(`Залишилось ${result} грошей у користувача.`);
+    let salary = parseFloat($("#salary").val());
+    let bonus = salary * 0.15;
+    let total = salary + bonus;
+    let tax = total * 0.1;
+    let remaining = total - tax - 190;
+    let result = remaining / 2;
+    $("#result").html(`Ви отримаєте ${result} грошей.`);
   }
 </script>
 

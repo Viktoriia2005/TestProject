@@ -1,0 +1,14 @@
+<html>
+<script>
+  const poem = ["Мороз", "и", "солнце", "день", "чудесный"];
+  const wordNumber = prompt(`Введіть номер слова від 1 ${poem.length}`);
+  if (wordNumber < 1 || wordNumber > poem.length) {
+    alert("Номер слова повинен бути у діапазоні від 1 до " + poem.length);
+  } else {
+    const newWord = prompt("Введіть слово, яке хочете замінити");
+    poem.splice(wordNumber - 1, 1, newWord);
+    document.write(poem.join(" "));
+  }
+</script>
+
+</html>

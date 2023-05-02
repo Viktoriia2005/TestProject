@@ -1,0 +1,10 @@
+<html>
+<script>
+    const poem = ["Мороз", "и", "солнце", "день", "чудесный"];
+    const wordIndex = prompt("Введіть номер слова, яке треба видалити від 1 до 5");
+    const newWord = prompt("Введіть слово, яке хочете замінити");
+    poem.splice(wordIndex - 1, 1, newWord);
+    document.write(poem.join(" "));
+</script>
+
+</html>

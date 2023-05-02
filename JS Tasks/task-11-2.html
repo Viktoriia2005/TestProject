@@ -1,8 +1,14 @@
 <html>
 <script>
-    let number = parseInt(prompt("Введіть число"), 10);
+    let number = prompt("Введіть число:");
     if (isNaN(number)) {
         alert("Ви ввели не число!");
+    } else {
+        for (let i = 2; i <= 10; i++) {
+            if (number % i === 0) {
+                alert(`${number} ділиться без остачі на ${i}`);
+            }
+        }
     }
 </script>
 
