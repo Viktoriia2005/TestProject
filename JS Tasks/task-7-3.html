@@ -1,0 +1,10 @@
+<html>
+<script>
+    let name = prompt("Введіть Ваше ім'я");
+    let yearOfBirth = prompt("Введіть рік Вашого народження");
+    let age = new Date().getFullYear() - yearOfBirth;
+    let ageString = name + ": " + age + (age % 10 === 1 ? " рік" : age % 10 === 2 || age % 10 === 3 || age % 10 === 4 ? " роки" : " років");
+    document.write(ageString);
+</script>
+
+</html>

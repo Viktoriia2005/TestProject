@@ -1,0 +1,19 @@
+<html>
+<script>
+    let salary = prompt("Введіть суму зарплати:");
+    let tax;
+    let netSalary;
+    if (salary <= 6000) {
+        tax = salary * 0.1;
+    } else if (salary <= 10000) {
+        tax = salary * 0.15;
+    } else if (salary <= 15000) {
+        tax = salary * 0.175;
+    } else {
+        tax = salary * 0.2;
+    }
+    netSalary = salary - tax;
+    alert(`Сума податку: ${tax}. Сума на руки: ${netSalary}`);
+</script>
+
+</html>

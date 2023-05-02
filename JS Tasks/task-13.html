@@ -1,0 +1,58 @@
+<html>
+<script>
+  let books = [
+    {
+      name: 'Л.Н. Толстого. Війна та мир', magic: false,
+      humor: false, detective: false, afraid: false
+    },
+    {
+      name: 'Джоан Роулінг. Гаррі Поттер', magic: true,
+      humor: false, detective: false, afraid: false
+    },
+    {
+      name: 'Брати Стругацькі. Понеділок починається в суботу.', magic: true,
+      humor: true, detective: false, afraid: false
+    },
+    {
+      name: 'Агата Крісті. Вечірка на Хеллоуїн.', magic: true,
+      humor: true, detective: true, afraid: false
+    },
+    {
+      name: 'Джонатан Страуд. Кричущі сходи.', magic: true,
+      humor: true, detective: true, afraid: true
+    },
+    {
+      name: 'Діана Маш. Заноза для воєначальника дракона', magic: true,
+      humor: false, detective: true, afraid: false
+    },
+    {
+      name: 'Кирило Круганський. Смішно або страшно.', magic: false,
+      humor: true, detective: false, afraid: true
+    },
+    {
+      name: 'Стівен Кінг. Мізери.', magic: false,
+      humor: false, detective: false, afraid: true
+    },
+    {
+      name: 'Едгар По. Дуже страшні історії.', magic: false,
+      humor: true, detective: true, afraid: true
+    },
+    {
+      name: 'А. Мариніна. Бездоганна репутація', magic: false,
+      humor: false, detective: true, afraid: false
+    },
+  ];
+  let answers = {
+    magic: confirm("Про магію має бути?"),
+    humor: confirm("Вам потрібно, щоб це було смішно?"),
+    detective: confirm("Детективная история нужна?"),
+    afraid: confirm("Чи будете ви боятися?"),
+  }
+  let filterArr = books.filter(book => {
+    if (book.humor === answers.humor && book.magic === answers.magic && book.detective === answers.detective && book.afraid === answers.afraid) return book
+  });
+  if (filterArr.length == 0) document.write('<p>Вибачте, ми не можемо вам нічого запропонувати</p>');
+  else filterArr.forEach(book => document.write('<p>Вам треба прочитати <strong style="color: #1e8cbe">' + book.name + '</strong></p>'));
+</script>
+
+</html>

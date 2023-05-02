@@ -1,0 +1,11 @@
+<html>
+<script>
+    const images = ["flowers/1.jpg", "flowers/2.jpg", "cars/1.jpg", "cars/2.jpg", "footballers/1.jpg", "toys/1.jpg", "cups/1.jpg", "cups/2.jpg"];
+    for (let i = 0; i < 8; i++) {
+        const img = document.createElement("img");
+        img.src = images[Math.floor(Math.random() * images.length)];
+        document.body.appendChild(img);
+    }
+</script>
+
+</html>
