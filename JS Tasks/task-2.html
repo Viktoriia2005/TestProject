@@ -2,7 +2,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
   function calculateSalary() {
-    let salary = parseFloat($("#salary").val());
+    const salaryStr=$("#salary").val();
+    console.log(salaryStr);
+    let salary = parseFloat(salaryStr);
     let bonus = salary * 0.15;
     let total = salary + bonus;
     let tax = total * 0.1;
