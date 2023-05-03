@@ -1,0 +1,9 @@
+{
+  "firstName": "Viktoriia",
+  "nickName": "Witch",
+  "age": 17,
+  "animals":{
+    "catName": "Biret",
+    "dogName": "Mukhtar"
+  }
+}
