@@ -1,0 +1,9 @@
+{
+  "firstName": "Larisa",
+  "lastName": "Kudin",
+  "age": 19,
+  "animals":{
+    "dog": "Jessica",
+    "cat": "Mykolka"
+  }
+}
