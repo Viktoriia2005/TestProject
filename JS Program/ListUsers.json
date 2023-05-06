@@ -1,0 +1,56 @@
+{
+  "people":[
+    {
+      "ID": 1,
+      "firstName": "Viktoriia",
+      "lastName": "Pavlenko",
+      "birthday":[
+        {
+          "day": 16,
+          "month": 11,
+          "year":2005
+        }
+      ],
+      "city": "Kremenchuk"
+      },
+      {
+        "ID": 2,
+        "firstName": "Marina",
+        "lastName": "Lavrenyuk",
+        "birthday":[
+          {
+            "day": 6,
+            "month": 10,
+            "year":2005
+          }
+        ],
+        "city": "Kremenchuk"
+      },
+      {
+        "ID": 3,
+        "firstName": "Daria",
+        "lastName": "Lyashuk",
+        "birthday": [
+          {
+            "day": 1,
+            "month": 10,
+            "year":2005
+          }
+        ],
+        "city": "Kremenchuk"
+      },
+      {
+        "ID": 4,
+        "firstName": "Kirill",
+        "lastName": "Sukhoi",
+        "birthday": [
+          {
+            "day": 14,
+            "month": 9,
+            "year":2005
+          }
+        ],
+        "city": "Kremenchuk"
+      }
+  ]
+}
