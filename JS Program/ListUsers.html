@@ -1,0 +1,80 @@
+<html>
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<script src="jquery-3.6.1.min.js"></script>  -->
+<link rel="stylesheet" href="ListUsers.css">
+
+<body>
+  <div class="navigation">
+    <button onclick="loadUser">Load</button>
+    <button onclick="saveUser">Save</button>
+    <button class="trigger" onclick="newUser">New</button>
+  </div>
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close-button">&#10008;</span>
+      <p>Name</p>
+      <input type="text" id="Name">
+      <p>Birthday</p>
+      <input type="text" id="Birthday"><img src="img/calendar.png" style="width: 20px; height: 20px;">
+      <p>City</p>
+      <input type="text" id="City">
+      <div class="abzath">
+        <button class="save-button" onclick="saveUser">Save</button>
+        <button class="cancel-button" onclick="cancelUser">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <table border="2" cellpadding="2" cellspacing="5">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>City</th>
+        <th>&#9997;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a title="Edit"><button class="trigger" onclick="editUsers"><img src="img/img.png"
+                style="width: 15px; height: 15px;"></a><a title="Delete"></button><button class="trigger"
+              onclick="deleteUsers"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a title="Edit"><button class="trigger" onclick="Edit"><img src="img/img.png"
+                style="width: 15px; height: 15px;"></button></a><a title="Delete"><button class="trigger"
+              onclick="Delete"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a title="Edit"><button class="trigger" onclick="Edit"><img src="img/img.png"
+                style="width: 15px; height: 15px;"></a><a title="Delete"></button><button class="trigger"
+              onclick="Delete"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a title="Edit"><button class="trigger" onclick="Edit"><img src="img/img.png"
+                style="width: 15px; height: 15px;"></a><a title="Delete"></button><button class="trigger"
+              onclick="Delete"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a></td>
+      </tr>
+    </tbody>
+  </table>
+  <script src="ListUsers.js"></script>
+</body>
+
+</html>
