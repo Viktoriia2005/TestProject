@@ -18,18 +18,9 @@ closeButton.addEventListener("click", toggleModal);
 cancelButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
 
-function loadJSON(callback) {
-  var xobj = new XMLHttpRequest();
-  xobj.overrideMimeType("application/json");
-  xobj.open('GET', 'ListUsers.json', true);
-  xobj.onreadystatechange = function () {
-    if (xobj.readyState == 4 && xobj.status == "200") {
-      callback(xobj.responseText);
-    }
-  };
-}
 
-loadJSON(function (response) {
-  var actual_JSON = JSON.parse(response);
-  console.log(actual_JSON);
-});
+function loadUsers() {
+   fetch('ListUsers.json')
+     .then(response => response.json())
+     .then(data => console.log(data));
+}
