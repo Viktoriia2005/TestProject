@@ -19,11 +19,7 @@ cancelButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
 
 function loadUsers() {
-  fetch("./ListUsers.json")
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-    })
+   fetch('ListUsers.json')
+     .then(response => response.json())
+     .then(data => console.log(data));
 }
