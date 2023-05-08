@@ -1,32 +1,30 @@
-{
-  "people":[
-    {
-      "ID": 1,
-      "firstName": "Viktoriia",
-      "lastName": "Pavlenko",
-      "birthday": "2005-11-16",
-      "city": "Kremenchuk"
-      },
-      {
-        "ID": 2,
-        "firstName": "Marina",
-        "lastName": "Lavrenyuk",
-        "birthday":"2005-10-06",
-        "city": "Kremenchuk"
-      },
-      {
-        "ID": 3,
-        "firstName": "Daria",
-        "lastName": "Lyashuk",
-        "birthday": "2005-09-14",
-        "city": "Kremenchuk"
-      },
-      {
-        "ID": 4,
-        "firstName": "Kirill",
-        "lastName": "Sukhoi",
-        "birthday": "2005-10-01",
-        "city": "Kremenchuk"
-      }
-  ]
-}
+[
+  {
+    "ID": 1,
+    "firstName": "Viktoriia",
+    "lastName": "Pavlenko",
+    "birthday": "2005-11-16",
+    "city": "Kremenchuk"
+  },
+  {
+    "ID": 2,
+    "firstName": "Marina",
+    "lastName": "Lavrenyuk",
+    "birthday": "2005-10-06",
+    "city": "Kremenchuk"
+  },
+  {
+    "ID": 3,
+    "firstName": "Daria",
+    "lastName": "Lyashuk",
+    "birthday": "2005-09-14",
+    "city": "Kremenchuk"
+  },
+  {
+    "ID": 4,
+    "firstName": "Kirill",
+    "lastName": "Sukhoi",
+    "birthday": "2005-10-01",
+    "city": "Kremenchuk"
+  }
+]
