@@ -5,11 +5,18 @@
   integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <link rel="stylesheet" href="ListUsers.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 <body>
   <div class="navigation">
-    <button onclick="loadUsers()">Load</button>
-    <button id="saveUser">Save</button>
+    <button type="button" class="btn btn-primary" onclick="loadUsers()">Load</button>
+    <button id="saveUser" type="button" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">New</button>
   </div>
   <!-- Modal -->
@@ -17,40 +24,38 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Questionnaire</h5>
-          <button type="button" data-bs-dismiss="modal" aria-label="Close">&#10008;</button>
+          <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>ID</p>
-          <input type="text" id="ID">
-          <p>Name</p>
-          <input type="text" id="Name">
-          <p>Birthday</p>
-          <input type="date" name="Date" id="davaToday">
-          <p>City</p>
-          <input type="text" id="City">
+          <input class="id-text" type="text" id="ID" placeholder="ID">
+          <input class="name-text" type="text" id="Name" placeholder="Name">
+          <input class="birthday-text" type="date" name="Date" id="davaToday">
+          <input class="city-text" type="text" id="City" placeholder="City">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-primary">Add user</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
   </div>
-  <table id="table" class="table table-bordered table-hover table-striped table-secondary">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Birthday</th>
-        <th>City</th>
-        <th>&#9997;</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <script>document.getElementById('davaToday').valueAsDate = new Date();</script>
+  <div class="table-text">
+    <table id="table" class="table table-bordered table-hover table-striped table-secondary">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Birthday</th>
+          <th>City</th>
+          <th>&#9997;</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <script>document.getElementById('davaToday').valueAsDate = new Date().toLocaleDateString('uk-UA');</script>
   <script src="ListUsers.js"></script>
 </body>
 
