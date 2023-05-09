@@ -1,4 +1,30 @@
 .navigation {
   padding: 2;
   margin: 5;
+  padding-left: 20;
+}
+.id-text {
+  width: 100%;
+  margin: 3;
+  padding: 2;
+}
+.name-text {
+  width: 100%;
+  margin: 3;
+  padding: 2;
+}
+.birthday-text {
+  width: 100%;
+  margin: 3;
+  padding: 2;
+  text-align: center;
+}
+.city-text {
+  width: 100%;
+  margin: 3;
+  padding: 2;
+}
+.table-text{
+  padding-left: 20;
+  padding-right: 20;
 }
