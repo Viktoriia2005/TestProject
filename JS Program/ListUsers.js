@@ -1,14 +1,12 @@
 function loadUsers() {
+  const button = document.querySelector('#myButton');
+  button.disabled = true;
+  button.textContent = 'Loading...';
   fetch('ListUsers.json')
     .then(response => response.json())
     .then(data => {
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
-      if (tbody.rows.length < 4) {
-        const button = document.querySelector('#myButton');
-        button.disabled = true;
-        alert('Ви не можете додавати більше користувачів!');
-      }
       for (const user of data) {
         const row = tbody.insertRow();
         const idCell = row.insertCell();
@@ -22,8 +20,11 @@ function loadUsers() {
         const actionsCell = row.insertCell();
         actionsCell.innerHTML = '<div class="edit-delet-text"><a title="Edit"><button class="btn btn-info" onclick="editUsers"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" onclick="deleteUsers"><span class="material-symbols-outlined">delete</span></button></a></div>';
       }
-    });
-}
+      button.disabled = true;
+      button.textContent = 'Cannot add users';
+      alert('Ви більше не можете завантажувати!');
+    })
+};
 
 
 function editUsers() {
