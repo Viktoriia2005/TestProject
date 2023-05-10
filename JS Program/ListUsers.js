@@ -14,11 +14,11 @@ function loadUsers() {
         newCell = newRow.insertCell();
         newCell.textContent = `${user.firstName} ${user.lastName}`;
         newCell = newRow.insertCell();
-        newCell.textContent = user.birthday;
+        newCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
         newCell = newRow.insertCell();
         newCell.textContent = user.city;
         newCell = newRow.insertCell();
-        newCell.innerHTML = '<a title="Edit"><button class="trigger" onclick="editUsers"><img src="img/img.png" style="width: 15px; height: 15px;"></a><a title="Delete"></button><button class="trigger" onclick="deleteUsers"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a>';
+        newCell.innerHTML = '<div class="edit-delet-text"><a title="Edit"><button class="btn btn-info" onclick="editUsers"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" onclick="deleteUsers"><span class="material-symbols-outlined">delete</span></button></a></div>';
       }
     })
 };
