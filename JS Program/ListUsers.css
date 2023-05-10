@@ -28,3 +28,7 @@
   padding-left: 20;
   padding-right: 20;
 }
+.edit-delet-text button, input, optgroup, select, textarea{
+  margin: 3;
+  padding: 2;
+}
