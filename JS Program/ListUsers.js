@@ -8,17 +8,17 @@ function loadUsers() {
         return;
       }
       for (const user of data) {
-        const row = tbody.insertRow();
-        const idCell = row.insertCell();
-        idCell.textContent = user.id;
-        const nameCell = row.insertCell();
-        nameCell.textContent = `${user.firstName} ${user.lastName}`;
-        const birthdayCell = row.insertCell();
-        birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
-        const cityCell = row.insertCell();
-        cityCell.textContent = user.city;
-        const actionsCell = row.insertCell();
-        actionsCell.innerHTML = '<div class="edit-delet-text"><a title="Edit"><button class="btn btn-info" onclick="editUsers"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" onclick="deleteUsers"><span class="material-symbols-outlined">delete</span></button></a></div>';
+        const newRow = tbody.insertRow();
+        let newCell = newRow.insertCell();
+        newCell.textContent = user.id;
+        newCell = newRow.insertCell();
+        newCell.textContent = `${user.firstName} ${user.lastName}`;
+        newCell = newRow.insertCell();
+        newCell.textContent = user.birthday;
+        newCell = newRow.insertCell();
+        newCell.textContent = user.city;
+        newCell = newRow.insertCell();
+        newCell.innerHTML = '<a title="Edit"><button class="trigger" onclick="editUsers"><img src="img/img.png" style="width: 15px; height: 15px;"></a><a title="Delete"></button><button class="trigger" onclick="deleteUsers"><img src="img/imgX.jpeg" style="width: 15px; height: 15px;"></button></a>';
       }
     })
 };
@@ -39,4 +39,3 @@ let cell3 = row.insertCell(2);
 cell1.innerHTML = document.getElementsByName("day")[0].value + "." + document.getElementsByName("month")[0].value + "." + document.getElementsByName("year")[0].value;
 cell2.innerHTML = ".";
 cell3.innerHTML = ".";
-
