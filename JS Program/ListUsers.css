@@ -2,6 +2,8 @@
   padding: 2;
   margin: 5;
   padding-left: 20;
+  display: flex;
+  gap: 15px;
 }
 .id-text {
   width: 100%;
