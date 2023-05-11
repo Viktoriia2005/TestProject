@@ -1,4 +1,5 @@
 <html>
+  <link type="image/x-icon" href="laptop_settings_computer_icon_251422.ico" rel="shortcut icon">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -40,6 +41,26 @@
       </div>
     </div>
   </div>
+  <!-- Modal edit -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel">Edit user</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input class="name-text" type="text" id="Name" placeholder="Name">
+          <input class="birthday-text" id="birthday" placeholder="Birthday">
+          <input class="city-text" type="text" id="City" placeholder="City">
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="saveButton" class="btn btn-primary">Save user</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="table-text">
     <table id="table" class="table table-bordered table-hover table-striped table-secondary">
       <thead>
@@ -55,7 +76,7 @@
       </tbody>
     </table>
   </div>
-  
+
   <script src="ListUsers.js"></script>
 </body>
 
