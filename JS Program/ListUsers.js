@@ -22,7 +22,6 @@ function loadUsers() {
       }
       button.disabled = true;
       button.textContent = 'Cannot add users';
-      alert('Ви більше не можете завантажувати!');
     })
 };
 
