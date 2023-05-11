@@ -29,29 +29,58 @@ function loadUsers() {
 };
 
 
-function editUser(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    showEditPopup(user);
-  }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
+function editUser() {
+  // Get the values of each input field
+  let name = document.getElementById("nameInput").value;
+  let birthday = document.getElementById("birthdayInput").value;
+  let city = document.getElementById("cityInput").value;
+
+  // Send the data to the server using AJAX
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "/edit-user");
+  xhr.setRequestHeader("Content-Type", "ListUsers.json");
+  xhr.send(JSON.stringify({ name: name, birthday: birthday, city: city }));
+
+  // Change the text and show the popup
+  document.getElementById("buttonModale").textContent = "Save user";
+  document.getElementById("editModalUser").textContent = "Edit user";
+  document.getElementById("popup").style.display = "block";
 }
+
 
 function showEditPopup(user) {
   let popup = document.getElementById("editUserModal");
   popup.classList.toggle("show");
-  const button = document.querySelector('#buttonModale');
-  button.textContent = 'Save user';
-  const title = document.querySelector('#editModalUser');
-  title.textContent = 'Edit user';
 
   // use user data here
   document.getElementById("nameInput").value = user.name;
   document.getElementById("birthdayInput").value = user.birthday;
   document.getElementById("cityInput").value = user.city;
-  }
+}
+function addUser() {
+  // Get the values of each input field
+  let name = document.getElementById("nameInput").value;
+  let birthday = document.getElementById("birthdayInput").value;
+  let city = document.getElementById("cityInput").value;
+
+  // Send the data to the server using AJAX
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "/add-user");
+  xhr.setRequestHeader("Content-Type", "ListUsers.json");
+  xhr.send(JSON.stringify({ name: name, birthday: birthday, city: city }));
+
+  // Clear the input fields
+  document.getElementById("nameInput").value = "";
+  document.getElementById("birthdayInput").value = "";
+  document.getElementById("cityInput").value = "";
+
+  // Change the text and show the popup
+  document.getElementById("buttonModale").textContent = "Add user";
+  document.getElementById("editModalUser").textContent = "New user";
+  document.getElementById("popup").style.display = "block";
+}
+
+
 
 function deleteUser(userId) {
   const user = users.find(u => u.id === userId);
