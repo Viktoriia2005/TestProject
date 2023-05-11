@@ -18,44 +18,23 @@
   <div class="navigation">
     <button type="button" id="myButton" class="btn btn-primary" onclick="loadUsers()">Load</button>
     <button id="saveUser" type="button" class="btn btn-primary">Save</button>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">New</button>
+    <button type="button" id="newUser" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal">New</button>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+          <h5 class="modal-title" id="editModalUser">Add new user</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input class="id-text" type="number" id="ID" placeholder="ID">
-          <input class="name-text" type="text" id="Name" placeholder="Name">
-          <input class="birthday-text" id="calendar" placeholder="Birthday">
-          <input class="city-text" type="text" id="City" placeholder="City">
+          <input class="name-text" type="text" id="nameInput" placeholder="Name">
+          <input class="birthday-text" id="birthdayInput" placeholder="Birthday">
+          <input class="city-text" type="text" id="cityInput" placeholder="City">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Add user</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal edit -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ModalLabel">Edit user</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <input class="name-text" type="text" id="Name" placeholder="Name">
-          <input class="birthday-text" id="birthday" placeholder="Birthday">
-          <input class="city-text" type="text" id="City" placeholder="City">
-        </div>
-        <div class="modal-footer">
-          <button type="button" id="saveButton" class="btn btn-primary">Save user</button>
+          <button type="button" onclick="addUser()" id="buttonModale" class="btn btn-primary">Add user</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
