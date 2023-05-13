@@ -10,75 +10,96 @@ function loadUsers() {
       users = data;
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
+      let i = 0;
       for (const user of data) {
         const row = tbody.insertRow();
+        row.setAttribute('id', 'userRow-' + i);
         const idCell = row.insertCell();
         idCell.textContent = user.id;
         const nameCell = row.insertCell();
+        nameCell.setAttribute('name', 'name-' + i);
         nameCell.textContent = user.name;
         const birthdayCell = row.insertCell();
+        birthdayCell.setAttribute('name', 'birthday-' + i);
         birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
         const cityCell = row.insertCell();
+        cityCell.setAttribute('name', 'city-' + i);
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
+        actionsCell.setAttribute('name', 'actions-' + i);
         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="editUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        i++;
       }
       button.disabled = true;
       button.textContent = 'Cannot add users';
+
     })
 };
 
 
-function editUser() {
-  // Get the values of each input field
-  let name = document.getElementById("nameInput").value;
-  let birthday = document.getElementById("birthdayInput").value;
-  let city = document.getElementById("cityInput").value;
+function editUser(userId) {
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    console.log(user);
 
-  // Send the data to the server using AJAX
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", "/edit-user");
-  xhr.setRequestHeader("Content-Type", "ListUsers.json");
-  xhr.send(JSON.stringify({ name: name, birthday: birthday, city: city }));
 
-  // Change the text and show the popup
-  document.getElementById("buttonModale").textContent = "Save user";
-  document.getElementById("editModalUser").textContent = "Edit user";
-  document.getElementById("popup").style.display = "block";
+    // use user data here
+    document.getElementById("nameInput").value = user.name;
+    document.getElementById("birthdayInput").value = user.birthday;
+    document.getElementById("cityInput").value = user.city;
+    // Change the text and show the popup
+    document.getElementById("buttonModale").textContent = "Save user";
+    document.getElementById("editModalUser").textContent = "Edit user";
+    document.getElementById("popup").style.display = "block";
+    let popup = document.getElementById("editUserModal");
+    popup.classList.toggle("show");
+  }
+  else {
+    console.log(`Can not find user with id = ${userId}`);
+  }
 }
 
 
-function showEditPopup(user) {
-  let popup = document.getElementById("editUserModal");
-  popup.classList.toggle("show");
 
-  // use user data here
-  document.getElementById("nameInput").value = user.name;
-  document.getElementById("birthdayInput").value = user.birthday;
-  document.getElementById("cityInput").value = user.city;
+function addUser(userId) {
+  const nameInput = document.querySelector('#nameInput');
+  const birthdayInput = document.querySelector('#birthdayInput');
+  const cityInput = document.querySelector('#cityInput');
+  const table = document.querySelector('#table');
+  const row = table.insertRow();
+  const idCell = row.insertCell();
+  idCell.textContent = users.length + 1;
+  const nameCell = row.insertCell();
+  nameCell.textContent = nameInput.value;
+  const birthdayCell = row.insertCell();
+  birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
+  const cityCell = row.insertCell();
+  cityCell.textContent = cityInput.value;
 }
-function addUser() {
-  // Get the values of each input field
-  let name = document.getElementById("nameInput").value;
-  let birthday = document.getElementById("birthdayInput").value;
-  let city = document.getElementById("cityInput").value;
+const addButton = document.querySelector('#buttonModale');
+addButton.addEventListener('click', addUser);
 
-  // Send the data to the server using AJAX
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", "/add-user");
-  xhr.setRequestHeader("Content-Type", "ListUsers.json");
-  xhr.send(JSON.stringify({ name: name, birthday: birthday, city: city }));
-
-  // Clear the input fields
-  document.getElementById("nameInput").value = "";
-  document.getElementById("birthdayInput").value = "";
-  document.getElementById("cityInput").value = "";
-
-  // Change the text and show the popup
-  document.getElementById("buttonModale").textContent = "Add user";
-  document.getElementById("editModalUser").textContent = "New user";
-  document.getElementById("popup").style.display = "block";
+function saveUser(userId) {
+  const nameInput = document.querySelector('#nameInput');
+  const birthdayInput = document.querySelector('#birthdayInput');
+  const cityInput = document.querySelector('#cityInput');
+  const table = document.querySelector('#table');
+  const row = table.insertRow();
+  const idCell = row.insertCell();
+  idCell.textContent = userId;
+  const nameCell = row.insertCell();
+  nameCell.textContent = nameInput.value;
+  const birthdayCell = row.insertCell();
+  birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
+  const cityCell = row.insertCell();
+  cityCell.textContent = cityInput.value;
 }
+
+const saveButton = document.querySelector('#buttonModale');
+saveButton.addEventListener('click', function () {
+  saveUser(users.length + 1);
+});
+
 
 
 
