@@ -1,0 +1,173 @@
+body {
+    font-style: italic;
+    background-color: Snow;
+    padding: 0;
+    margin: 0;
+}
+
+.header {
+    font-size: 20pt;
+    font-family: "Arial Rounded MT Bold";
+    margin-bottom: 10px;
+    background-color: limegreen;
+    height: 100px;
+    text-align: center;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.divs {
+    margin: 0px;
+    width: 10%;
+    padding: 0px;
+    float: left;
+}
+
+.navbar {
+    position: absolute;
+    left: 80%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: limegreen;
+}
+
+.navigation {
+    background-color: limegreen;
+    font-size: 15pt;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navigation li {
+    display: inline-block;
+    margin: 0 20px;
+}
+
+.navigation li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.house {
+    font-style: italic;
+    font-size: 15pt;
+    color: black;
+    background-color: limegreen;
+    font-weight: bold;
+    padding: 0px;
+    margin-bottom: 0;
+    width: 185px;
+    height: 250px;
+}
+
+.house ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.house li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.small-container {
+    position: absolute;
+    left: 200px;
+    top: 245px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+
+}
+
+.rating .fa {
+    color: black;
+}
+
+.col-1:hover {
+    transform: translateY(-5px);
+}
+
+.col-1 {
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 50px;
+    transition: transform 0.5s;
+}
+
+/* footer */
+
+.footer {
+    position: absolute;
+    top: 250%;
+    background: limegreen;
+    color: Snow;
+    font-size: 14px;
+    padding: 60px 0 20px;
+}
+
+.footer p {
+    color: Snow;
+}
+
+.footer h3 {
+    color: Snow;
+    margin-bottom: 20px;
+}
+
+.footer-col-1,
+.footer-col-2,
+.footer-col-3 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+
+.footer-col-1 {
+    flex-basis: 25%;
+}
+
+.footer-col-2 {
+    flex: 1;
+    text-align: center;
+}
+
+.footer-col-2 img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.footer-col-3 {
+    flex-basis: 12%;
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+}
