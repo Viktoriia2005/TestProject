@@ -59,47 +59,69 @@ function editUser(userId) {
   }
 }
 
-
-
-function addUser(userId) {
-  const nameInput = document.querySelector('#nameInput');
-  const birthdayInput = document.querySelector('#birthdayInput');
-  const cityInput = document.querySelector('#cityInput');
-  const table = document.querySelector('#table');
-  const row = table.insertRow();
-  const idCell = row.insertCell();
-  idCell.textContent = users.length + 1;
-  const nameCell = row.insertCell();
-  nameCell.textContent = nameInput.value;
-  const birthdayCell = row.insertCell();
-  birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
-  const cityCell = row.insertCell();
-  cityCell.textContent = cityInput.value;
-}
-const addButton = document.querySelector('#buttonModale');
-addButton.addEventListener('click', addUser);
+let name = '';
+let birthday = '';
+let city = '';
 
 function saveUser(userId) {
   const nameInput = document.querySelector('#nameInput');
   const birthdayInput = document.querySelector('#birthdayInput');
   const cityInput = document.querySelector('#cityInput');
   const table = document.querySelector('#table');
-  const row = table.insertRow();
-  const idCell = row.insertCell();
-  idCell.textContent = userId;
-  const nameCell = row.insertCell();
+  const row = table.rows[userId];
+  const nameCell = row.cells1;
   nameCell.textContent = nameInput.value;
-  const birthdayCell = row.insertCell();
+  const birthdayCell = row.cells2;
   birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
-  const cityCell = row.insertCell();
+  const cityCell = row.cells3;
   cityCell.textContent = cityInput.value;
+  name = nameInput.value;
+  birthday = birthdayInput.value;
+  city = cityInput.value;
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    const row = $(`tr[data-id="${userId}"]`);
+    row.find('.name').text(user.name);
+    row.find('.birthday').text(user.birthday);
+    row.find('.city').text(user.city);
+  }
+  else {
+    console.log(`Can not find user with id = ${userId}`);
+  }
 }
 
-const saveButton = document.querySelector('#buttonModale');
-saveButton.addEventListener('click', function () {
-  saveUser(users.length + 1);
-});
 
+let lastUserId = 0;
+
+function showAddUserPopup() {
+  document.querySelector('#nameInput').value = '';
+  document.querySelector('#birthdayInput').value = '';
+  document.querySelector('#cityInput').value = '';
+  const addButton = document.querySelector('#buttonModale');
+  addButton.removeEventListener('click', addUser);
+  addButton.addEventListener('click', addUser);
+  addButton.replaceWith(addButton.cloneNode(true));
+
+}
+
+function addUser() {
+  const name = document.querySelector('#nameInput').value;
+  const birthday = document.querySelector('#birthdayInput').value;
+  const city = document.querySelector('#cityInput').value;
+  const id = ++lastUserId;
+  const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
+  const newRow = tableRef.insertRow();
+  newRow.id = 'user' + id;
+  const newCell = newRow.insertCell(0);
+  const newText = document.createTextNode(name);
+  newCell.appendChild(newText);
+  const newCell2 = newRow.insertCell(1);
+  const newText2 = document.createTextNode(birthday);
+  newCell2.appendChild(newText2);
+  const newCell3 = newRow.insertCell(2);
+  const newText3 = document.createTextNode(city);
+  newCell3.appendChild(newText3);
+}
 
 
 
