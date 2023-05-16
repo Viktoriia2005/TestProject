@@ -51,7 +51,6 @@ function getMaxId() {
   return maxId;
 }
 
-
 function addUser() {
   const name = document.querySelector('#nameInput').value;
   const birthday = document.querySelector('#birthdayInput').value;
@@ -67,16 +66,20 @@ function addUser() {
   newRow.id = 'user' + id;
 
   const newCell = newRow.insertCell(0);
-  const newText = document.createTextNode(name);
+  const newText = document.createTextNode(id);
   newCell.appendChild(newText);
 
   const newCell2 = newRow.insertCell(1);
-  const newText2 = document.createTextNode(birthday);
+  const newText2 = document.createTextNode(name);
   newCell2.appendChild(newText2);
 
   const newCell3 = newRow.insertCell(2);
-  const newText3 = document.createTextNode(city);
+  const newText3 = document.createTextNode(birthday);
   newCell3.appendChild(newText3);
+
+  const newCell4 = newRow.insertCell(3);
+  const newText4 = document.createTextNode(city);
+  newCell4.appendChild(newText4);
 
   // Update maxId value
   const updatedMaxId = maxId + 1;
@@ -99,12 +102,10 @@ function addUser() {
   actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="editUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
 }
 
-
 function editUser(userId) {
   const user = users.find(u => u.id === userId);
   if (user) {
     console.log(user);
-
 
     // use user data here
     document.getElementById("nameInput").value = user.name;
@@ -114,10 +115,10 @@ function editUser(userId) {
     document.getElementById("buttonModale").textContent = "Save user";
     document.getElementById("editModalUser").textContent = "Edit user";
     document.getElementById("popup").style.display = "block";
-    let editButton = document.querySelector('#buttonModale');
-    const newEditButton = editButton.cloneNode(true);
-    editButton.replaceWith(newEditButton);
-    newEditButton.addEventListener('click', () => saveUser(userId));
+    let saveButton = document.querySelector('#buttonModale');
+    const newSaveButton = saveButton.cloneNode(true);
+    saveButton.replaceWith(newSaveButton);
+    newSaveButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
   }
@@ -126,7 +127,6 @@ function editUser(userId) {
   }
 }
 
-
 function saveUser(userId) {
   const nameInput = document.querySelector('#nameInput');
   const birthdayInput = document.querySelector('#birthdayInput');
@@ -134,7 +134,6 @@ function saveUser(userId) {
   const table = document.querySelector('#table');
   const row = table.rows[userId];
   if (row) {
-    const idCell = row.cells[0];
     const nameCell = row.cells[1];
     nameCell.textContent = nameInput.value;
     const birthdayCell = row.cells[2];
@@ -150,24 +149,17 @@ function saveUser(userId) {
 
 }
 
-
 function showAddUserPopup() {
   document.querySelector('#nameInput').value = '';
   document.querySelector('#birthdayInput').value = '';
   document.querySelector('#cityInput').value = '';
-  const addButton = document.querySelector('#buttonModale');
-  addButton.removeEventListener('click', addUser);
-  addButton.removeEventListener('click', saveUser);
-  addButton.addEventListener('click', addUser);
-  addButton.replaceWith(addButton.cloneNode(true));
-
+  let addButton = document.querySelector('#buttonModale');
+  const newAddButton = addButton.cloneNode(true);
+  addButton.replaceWith(newAddButton);
+  newAddButton.addEventListener('click', () => addUser());
+  let popup = document.getElementById("editUserModal");
+  popup.classList.toggle("show");
 }
-
-
-
-
-
-
 
 function deleteUser(userId) {
   const user = users.find(u => u.id === userId);
