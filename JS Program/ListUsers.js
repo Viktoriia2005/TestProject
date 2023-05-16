@@ -56,6 +56,8 @@ function addUser() {
   const name = document.querySelector('#nameInput').value;
   const birthday = document.querySelector('#birthdayInput').value;
   const city = document.querySelector('#cityInput').value;
+  document.getElementById("buttonModale").textContent = "Add user";
+  document.getElementById("editModalUser").textContent = "Add new user";
 
   const maxId = getMaxId();
   const id = maxId + 1;
@@ -118,12 +120,6 @@ function editUser(userId) {
     newEditButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
-    const addButton = document.querySelector('#buttonModale');
-    addButton.removeEventListener('click', addUser);
-    addButton.removeEventListener('click', saveUser);
-    addButton.addEventListener('click', saveUser);
-
-    popup.classList.toggle("show");
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
@@ -138,27 +134,20 @@ function saveUser(userId) {
   const table = document.querySelector('#table');
   const row = table.rows[userId];
   if (row) {
-    const nameCell = row.cells[0];
+    const idCell = row.cells[0];
+    const nameCell = row.cells[1];
     nameCell.textContent = nameInput.value;
-    const birthdayCell = row.cells[1];
+    const birthdayCell = row.cells[2];
     birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
-    const cityCell = row.cells[2];
+    const cityCell = row.cells[3];
     cityCell.textContent = cityInput.value;
-  }
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    let cells = document.getElementsByClassName('userRow-');
-    for (let i = 0; i < cells.length; i++) {
-      let cellText = cells[i].innerHTML;
-      row.find('.name').text(user.name);
-      row.find('.birthday').text(user.birthday);
-      row.find('.city').text(user.city);
-    }
-
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
   }
+  const modal = document.querySelector('#editUserModal');
+  $(modal).modal('hide');
+
 }
 
 
