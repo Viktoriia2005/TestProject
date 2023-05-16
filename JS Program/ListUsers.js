@@ -1,40 +1,3 @@
-// let users;
-
-// function loadUsers() {
-//   const button = document.querySelector('#myButton');
-//   button.disabled = true;
-//   button.textContent = 'Loading...';
-//   fetch('ListUsers.json')
-//     .then(response => response.json())
-//     .then(data => {
-//       users = data;
-//       const table = document.querySelector('#table');
-//       const tbody = table.querySelector('tbody');
-//       let i = 0;
-//       for (const user of data) {
-//         const row = tbody.insertRow();
-//         row.setAttribute('id', 'userRow-' + i);
-//         const idCell = row.insertCell();
-//         idCell.textContent = user.id;
-//         const nameCell = row.insertCell();
-//         nameCell.setAttribute('name', 'name-' + i);
-//         nameCell.textContent = user.name;
-//         const birthdayCell = row.insertCell();
-//         birthdayCell.setAttribute('name', 'birthday-' + i);
-//         birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
-//         const cityCell = row.insertCell();
-//         cityCell.setAttribute('name', 'city-' + i);
-//         cityCell.textContent = user.city;
-//         const actionsCell = row.insertCell();
-//         actionsCell.setAttribute('name', 'actions-' + i);
-//         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="editUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
-//         i++;
-//       }
-//       button.disabled = true;
-//       button.textContent = 'Cannot add users';
-
-//     })
-// };
 let users;
 
 function loadUsers() {
@@ -87,6 +50,7 @@ function getMaxId() {
   }
   return maxId;
 }
+
 
 function addUser() {
   const name = document.querySelector('#nameInput').value;
@@ -154,11 +118,10 @@ function editUser(userId) {
     newEditButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
-    
+    const addButton = document.querySelector('#buttonModale');
     addButton.removeEventListener('click', addUser);
     addButton.removeEventListener('click', saveUser);
     addButton.addEventListener('click', saveUser);
-
 
     popup.classList.toggle("show");
   }
@@ -211,28 +174,7 @@ function showAddUserPopup() {
 
 }
 
-// function addUser() {
-//   const name = document.querySelector('#nameInput').value;
-//   const birthday = document.querySelector('#birthdayInput').value;
-//   const city = document.querySelector('#cityInput').value;
-//   const id = ++lastUserId;
-//   const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
-//   const newRow = tableRef.insertRow();
-//   newRow.id = 'user' + id;
-//   const newCell = newRow.insertCell(0);
-//   const newText = document.createTextNode(name);
-//   newCell.appendChild(newText);
-//   const newCell2 = newRow.insertCell(1);
-//   const newText2 = document.createTextNode(birthday);
-//   newCell2.appendChild(newText2);
-//   const newCell3 = newRow.insertCell(2);
-//   const newText3 = document.createTextNode(city);
-//   newCell3.appendChild(newText3);
-// }
-// const addButton = document.querySelector('#buttonModale');
-// addButton.removeEventListener('click', addUser);
-// addButton.removeEventListener('click', saveUser);
-// addButton.addEventListener('click', saveUser);
+
 
 
 
