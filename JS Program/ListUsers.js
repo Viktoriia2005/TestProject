@@ -17,16 +17,15 @@ function loadUsers() {
         const idCell = row.insertCell();
         idCell.textContent = user.id;
         const nameCell = row.insertCell();
-        nameCell.setAttribute('name', 'name-' + i);
+        nameCell.setAttribute('name', 'userName');
         nameCell.textContent = user.name;
         const birthdayCell = row.insertCell();
-        birthdayCell.setAttribute('name', 'birthday-' + i);
+        birthdayCell.setAttribute('name', 'userBirthday' );
         birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
         const cityCell = row.insertCell();
-        cityCell.setAttribute('name', 'city-' + i);
+        cityCell.setAttribute('name', 'userCity' );
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
-        actionsCell.setAttribute('name', 'actions-' + i);
         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="editUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
         i++;
       }
@@ -55,9 +54,8 @@ function addUser() {
   const name = document.querySelector('#nameInput').value;
   const birthday = document.querySelector('#birthdayInput').value;
   const city = document.querySelector('#cityInput').value;
-  document.getElementById("buttonModale").textContent = "Add user";
-  document.getElementById("editModalUser").textContent = "Add new user";
-
+  const tmp = document.getElementById("buttonModale");
+  console.log(tmp);
   const maxId = getMaxId();
   const id = maxId + 1;
 
@@ -70,14 +68,17 @@ function addUser() {
   newCell.appendChild(newText);
 
   const newCell2 = newRow.insertCell(1);
+  newCell2.setAttribute('name', 'userName');
   const newText2 = document.createTextNode(name);
   newCell2.appendChild(newText2);
 
   const newCell3 = newRow.insertCell(2);
+  newCell3.setAttribute('name', 'userBirthday' );
   const newText3 = document.createTextNode(birthday);
   newCell3.appendChild(newText3);
 
   const newCell4 = newRow.insertCell(3);
+  newCell4.setAttribute('name', 'userCity' );
   const newText4 = document.createTextNode(city);
   newCell4.appendChild(newText4);
 
@@ -98,11 +99,12 @@ function addUser() {
 
   // Add action buttons for a new user
   const actionsCell = newRow.insertCell();
-  actionsCell.setAttribute('name', 'actions-' + updatedMaxId);
   actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="editUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+  const modal = document.querySelector('#editUserModal');
+  $(modal).modal('hide');
 }
 
-function editUser(userId) {
+function showEditUser(userId) {
   const user = users.find(u => u.id === userId);
   if (user) {
     console.log(user);
@@ -134,12 +136,17 @@ function saveUser(userId) {
   const table = document.querySelector('#table');
   const row = table.rows[userId];
   if (row) {
-    const nameCell = row.cells[1];
+    const nameCell = row.querySelector(`td[name="userName"]`);
     nameCell.textContent = nameInput.value;
-    const birthdayCell = row.cells[2];
+    const birthdayCell = row.querySelector(`td[name="userBirthday"]`);
     birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
-    const cityCell = row.cells[3];
+    const cityCell = row.querySelector(`td[name="userCity"]`);
     cityCell.textContent = cityInput.value;
+    const user = users.find(u => u.id === userId);
+    user.name = nameInput.value;
+    user.birthday = birthdayInput.value;
+    user.city = cityInput.value;
+    console.log(users);
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
@@ -157,6 +164,8 @@ function showAddUserPopup() {
   const newAddButton = addButton.cloneNode(true);
   addButton.replaceWith(newAddButton);
   newAddButton.addEventListener('click', () => addUser());
+  document.getElementById("buttonModale").textContent = "Add user";
+  document.getElementById("editModalUser").textContent = "Add new user";
   let popup = document.getElementById("editUserModal");
   popup.classList.toggle("show");
 }
