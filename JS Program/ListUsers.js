@@ -20,13 +20,13 @@ function loadUsers() {
         nameCell.setAttribute('name', 'userName');
         nameCell.textContent = user.name;
         const birthdayCell = row.insertCell();
-        birthdayCell.setAttribute('name', 'userBirthday' );
+        birthdayCell.setAttribute('name', 'userBirthday');
         birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
         const cityCell = row.insertCell();
-        cityCell.setAttribute('name', 'userCity' );
+        cityCell.setAttribute('name', 'userCity');
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
         i++;
       }
 
@@ -73,12 +73,12 @@ function addUser() {
   newCell2.appendChild(newText2);
 
   const newCell3 = newRow.insertCell(2);
-  newCell3.setAttribute('name', 'userBirthday' );
+  newCell3.setAttribute('name', 'userBirthday');
   const newText3 = document.createTextNode(birthday);
   newCell3.appendChild(newText3);
 
   const newCell4 = newRow.insertCell(3);
-  newCell4.setAttribute('name', 'userCity' );
+  newCell4.setAttribute('name', 'userCity');
   const newText4 = document.createTextNode(city);
   newCell4.appendChild(newText4);
 
@@ -99,7 +99,7 @@ function addUser() {
 
   // Add action buttons for a new user
   const actionsCell = newRow.insertCell();
-  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
   const modal = document.querySelector('#editUserModal');
   $(modal).modal('hide');
 }
@@ -170,15 +170,35 @@ function showAddUserPopup() {
   popup.classList.toggle("show");
 }
 
+
+
 function deleteUser(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    console.log(user);
-  }
-  else {
+  const popupYesButton = document.querySelector('#popupDelete');
+  popupYesButton.addEventListener('click', () => {
+    const row = $('#userRow-' + i);
+    if (row.length) {
+      row.remove();
+    }
+  });
+  const userIndex = users.findIndex(u => u.id === userId);
+  if (userIndex !== -1) {
+    users.splice(userIndex, 1);
+    console.log(`User with id = ${userId} was deleted`);
+  } else {
     console.log(`Can not find user with id = ${userId}`);
   }
+  let i;
+  const popupDeleteButton = document.querySelector('#popupDelete');
+  popupDeleteButton.addEventListener('click', () => {
+    const row = $('#userRow-' + i);
+    if (row.length) {
+      row.remove();
+    }
+  });
 }
+
+
+
 
 $(document).ready(function () {
 
