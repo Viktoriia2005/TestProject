@@ -26,7 +26,7 @@ function loadUsers() {
         cityCell.setAttribute('name', 'userCity' );
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="editUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
         i++;
       }
 
@@ -99,7 +99,7 @@ function addUser() {
 
   // Add action buttons for a new user
   const actionsCell = newRow.insertCell();
-  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="editUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button class="btn btn-info" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
   const modal = document.querySelector('#editUserModal');
   $(modal).modal('hide');
 }
