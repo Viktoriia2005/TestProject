@@ -26,7 +26,7 @@ function loadUsers() {
         cityCell.setAttribute('name', 'userCity');
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="deleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
         i++;
       }
 
@@ -99,7 +99,7 @@ function addUser() {
 
   // Add action buttons for a new user
   const actionsCell = newRow.insertCell();
-  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="deleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
   const modal = document.querySelector('#editUserModal');
   $(modal).modal('hide');
 }
@@ -172,32 +172,49 @@ function showAddUserPopup() {
 
 
 
+function showDeleteUser(userId) {
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    console.log(user);
+
+    // use user data here
+    // document.getElementById("nameInput").value = user.name;
+    // document.getElementById("birthdayInput").value = user.birthday;
+    // document.getElementById("cityInput").value = user.city;
+    // Change the text and show the popup
+    document.getElementById("Delete").style.display = "block";
+    let deleteButton = document.querySelector('#popupDelete');
+    const newDeleteButton = deleteButton.cloneNode(true);
+    deleteButton.replaceWith(newDeleteButton);
+    newDeleteButton.addEventListener('click', () => deleteUser(userId));
+    let popup = document.getElementById("staticBackdrop");
+    popup.classList.toggle("show");
+  }
+  else {
+    console.log(`Can not find user with id = ${userId}`);
+  }
+}
+
 function deleteUser(userId) {
-  const popupYesButton = document.querySelector('#popupDelete');
-  popupYesButton.addEventListener('click', () => {
-    const row = $('#userRow-' + i);
-    if (row.length) {
-      row.remove();
-    }
-  });
+  const user = users.find(u => u.id === userId);
+  let modalWindow = document.querySelector('#staticBackdrop');
+  let modalBody = modalWindow.querySelector('.modal-body');
+  modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
+
   const userIndex = users.findIndex(u => u.id === userId);
   if (userIndex !== -1) {
     users.splice(userIndex, 1);
     console.log(`User with id = ${userId} was deleted`);
-  } else {
+
+    let i = 0;
+    let rowId = 'userRow-' + i;
+    let row = document.getElementById(rowId);
+    row.remove();
+  }
+  else {
     console.log(`Can not find user with id = ${userId}`);
   }
-  let i;
-  const popupDeleteButton = document.querySelector('#popupDelete');
-  popupDeleteButton.addEventListener('click', () => {
-    const row = $('#userRow-' + i);
-    if (row.length) {
-      row.remove();
-    }
-  });
 }
-
-
 
 
 $(document).ready(function () {
