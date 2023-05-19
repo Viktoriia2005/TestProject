@@ -10,10 +10,9 @@ function loadUsers() {
       users = data;
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
-      let i = 0;
       for (const user of data) {
         const row = tbody.insertRow();
-        row.setAttribute('id', 'userRow-' + i);
+        row.setAttribute('id', 'userRow-' + user.id);
         const idCell = row.insertCell();
         idCell.textContent = user.id;
         const nameCell = row.insertCell();
@@ -27,7 +26,6 @@ function loadUsers() {
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
-        i++;
       }
 
       button.disabled = true;
@@ -177,12 +175,10 @@ function showDeleteUser(userId) {
   if (user) {
     console.log(user);
 
-    // use user data here
-    // document.getElementById("nameInput").value = user.name;
-    // document.getElementById("birthdayInput").value = user.birthday;
-    // document.getElementById("cityInput").value = user.city;
-    // Change the text and show the popup
-    document.getElementById("Delete").style.display = "block";
+    const modalWindow = document.querySelector('#staticBackdrop');
+    const modalBody = modalWindow.querySelector('.modal-body');
+    modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
+
     let deleteButton = document.querySelector('#popupDelete');
     const newDeleteButton = deleteButton.cloneNode(true);
     deleteButton.replaceWith(newDeleteButton);
@@ -196,19 +192,12 @@ function showDeleteUser(userId) {
 }
 
 function deleteUser(userId) {
-  const user = users.find(u => u.id === userId);
-  let modalWindow = document.querySelector('#staticBackdrop');
-  let modalBody = modalWindow.querySelector('.modal-body');
-  modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
-
   const userIndex = users.findIndex(u => u.id === userId);
   if (userIndex !== -1) {
     users.splice(userIndex, 1);
     console.log(`User with id = ${userId} was deleted`);
-
-    let i = 0;
-    let rowId = 'userRow-' + i;
-    let row = document.getElementById(rowId);
+    const rowId = `userRow-${userId}`;
+    const row = document.getElementById(rowId);
     row.remove();
   }
   else {
