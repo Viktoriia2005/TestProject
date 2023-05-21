@@ -168,8 +168,6 @@ function showAddUserPopup() {
   popup.classList.toggle("show");
 }
 
-
-
 function showDeleteUser(userId) {
   const user = users.find(u => u.id === userId);
   if (user) {
@@ -205,7 +203,6 @@ function deleteUser(userId) {
   }
 }
 
-
 $(document).ready(function () {
 
   let userLang = navigator.language || navigator.userLanguage;
@@ -219,3 +216,9 @@ $(document).ready(function () {
   $("#birthdayInput").datepicker(options);
 });
 
+let isAdmin = true;
+if (isAdmin) {
+  isAdminCheckbox.checked = true;
+} else {
+  isAdminCheckbox.checked = false;
+}
