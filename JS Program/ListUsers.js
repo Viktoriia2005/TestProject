@@ -1,16 +1,19 @@
 let users;
+let cities;
 
 function loadUsers() {
   const button = document.querySelector('#myButton');
   button.disabled = true;
   button.textContent = 'Loading...';
-  fetch('ListUsers.json')
+  fetch('SiteData.json')
     .then(response => response.json())
     .then(data => {
-      users = data;
+      users = data.users;
+      cities =data.cities;
+      console.log(cities);
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
-      for (const user of data) {
+      for (const user of users) {
         const row = tbody.insertRow();
         row.setAttribute('id', 'userRow-' + user.id);
         const idCell = row.insertCell();
