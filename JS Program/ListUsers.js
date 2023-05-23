@@ -131,7 +131,7 @@ function showEditUserPopup(userId) {
 
     cities.forEach(city => {
       let opt = document.createElement('option');
-      opt.value = city.id;
+      opt.text = city.id;
       opt.text = city.name;
       select.appendChild(opt);
     });
