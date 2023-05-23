@@ -4,14 +4,14 @@
       "id": 1,
       "name": "Viktoriia Pavlenko",
       "birthday": "2005-11-16",
-      "city": "Кременчук",
+      "city": 2,
       "isAdmin": true
     },
     {
       "id": 2,
       "name": "Marina Lavrenyuk",
       "birthday": "2005-10-06",
-      "city": "Кременчук",
+      "city": 326,
       "isAdmin": false
     },
     {
