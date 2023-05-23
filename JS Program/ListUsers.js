@@ -115,6 +115,7 @@ function showEditUserPopup(userId) {
     document.getElementById("birthdayInput").value = user.birthday;
     document.getElementById("cityInput").value = user.city;
     document.getElementById("isAdminInput").checked = user.isAdmin;
+
     // Change the text and show the popup
     document.getElementById("buttonModale").textContent = "Save user";
     document.getElementById("editModalUser").textContent = "Edit user";
@@ -128,17 +129,20 @@ function showEditUserPopup(userId) {
 
     let select = document.getElementById('cityInput');
 
+    cities.sort((a, b) => a.name.localeCompare(b.name));
+
     cities.forEach(city => {
       let option = document.createElement('option');
       option.value = city.id;
       option.text = city.name;
 
-      if (city.name === "Кременчук") {
-        option.selected = true;
-      }
-
       select.appendChild(option);
     });
+    document.getElementById("cityInput").value = user.city;
+    let userCityId = user.city;
+    let cityData = cities.find(city => city.id === userCityId);
+    let userCityCell = document.querySelector('td[name="userCity"]');
+    userCityCell.textContent = cityData ? cityData.name : '';
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
