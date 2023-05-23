@@ -9,8 +9,8 @@ function loadUsers() {
     .then(response => response.json())
     .then(data => {
       users = data.users;
-      cities =data.cities;
-      console.log(cities);
+      cities = data.cities;
+      // console.log(cities);
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
       for (const user of users) {
@@ -28,7 +28,7 @@ function loadUsers() {
         cityCell.setAttribute('name', 'userCity');
         cityCell.textContent = user.city;
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUser(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUser(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
       }
 
       button.disabled = true;
@@ -100,12 +100,12 @@ function addUser() {
 
   // Add action buttons for a new user
   const actionsCell = newRow.insertCell();
-  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUser(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUser(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
   const modal = document.querySelector('#editUserModal');
   $(modal).modal('hide');
 }
 
-function showEditUser(userId) {
+function showEditUserPopup(userId) {
   const user = users.find(u => u.id === userId);
   if (user) {
     console.log(user);
@@ -114,6 +114,7 @@ function showEditUser(userId) {
     document.getElementById("nameInput").value = user.name;
     document.getElementById("birthdayInput").value = user.birthday;
     document.getElementById("cityInput").value = user.city;
+    document.getElementById("isAdminInput").checked = user.isAdmin;
     // Change the text and show the popup
     document.getElementById("buttonModale").textContent = "Save user";
     document.getElementById("editModalUser").textContent = "Edit user";
@@ -124,6 +125,16 @@ function showEditUser(userId) {
     newSaveButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
+
+
+    let select = document.getElementById('cityInput');
+
+    cities.forEach(city => {
+      let opt = document.createElement('option');
+      opt.value = city.id;
+      opt.text = city.name;
+      select.appendChild(opt);
+    });
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
@@ -171,7 +182,7 @@ function showAddUserPopup() {
   popup.classList.toggle("show");
 }
 
-function showDeleteUser(userId) {
+function showDeleteUserPopup(userId) {
   const user = users.find(u => u.id === userId);
   if (user) {
     console.log(user);
@@ -218,10 +229,3 @@ $(document).ready(function () {
 
   $("#birthdayInput").datepicker(options);
 });
-
-let isAdmin = true;
-if (isAdmin) {
-  isAdminCheckbox.checked = true;
-} else {
-  isAdminCheckbox.checked = false;
-}
