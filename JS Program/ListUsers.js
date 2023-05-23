@@ -126,14 +126,18 @@ function showEditUserPopup(userId) {
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
 
-
     let select = document.getElementById('cityInput');
 
     cities.forEach(city => {
-      let opt = document.createElement('option');
-      opt.text = city.id;
-      opt.text = city.name;
-      select.appendChild(opt);
+      let option = document.createElement('option');
+      option.value = city.id;
+      option.text = city.name;
+
+      if (city.name === "Кременчук") {
+        option.selected = true;
+      }
+
+      select.appendChild(option);
     });
   }
   else {
