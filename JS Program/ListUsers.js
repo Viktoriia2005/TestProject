@@ -51,33 +51,32 @@ function loadUsers() {
         select.appendChild(option);
       });
     })
-    const saveButton = document.getElementById('saveUser');
+  const saveButton = document.getElementById('saveUser');
 
-    
-    saveButton.addEventListener('click', function() {
-      
-      const url = 'SiteData.json'; 
-      const fileName = 'SiteData-1.json'; 
-  
-      downloadFile(url, fileName);
-    });
-  
-    
-    function downloadFile(url, fileName) {
-      fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-        .then(res => res.blob())
-        .then(res => {
-          const aElement = document.createElement('a');
-          aElement.setAttribute('download', fileName);
-          const href = URL.createObjectURL(res);
-          aElement.href = href;
-          aElement.setAttribute('target', '_blank');
-          aElement.click();
-          URL.revokeObjectURL(href);
-        });
-    }
+  saveButton.addEventListener('click', function () {
 
-  };
+    const url = 'SiteData.json';
+    const fileName = 'SiteData-1.json';
+
+    downloadFile(url, fileName);
+  });
+
+
+  function downloadFile(url, fileName) {
+    fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
+      .then(res => res.blob())
+      .then(res => {
+        const aElement = document.createElement('a');
+        aElement.setAttribute('download', fileName);
+        const href = URL.createObjectURL(res);
+        aElement.href = href;
+        aElement.setAttribute('target', '_blank');
+        aElement.click();
+        URL.revokeObjectURL(href);
+      });
+  }
+
+};
 
 function getMaxId() {
   let maxId = 0;
@@ -118,7 +117,8 @@ function addUser() {
 
   const newCell4 = newRow.insertCell(3);
   newCell4.setAttribute('name', 'userCity');
-  const newText4 = document.createTextNode(city);
+  let cityData = cities.find(city => city.id === Number(city));
+  const newText4 = document.createTextNode(cityData.name);
   newCell4.appendChild(newText4);
 
   // Update maxId value
