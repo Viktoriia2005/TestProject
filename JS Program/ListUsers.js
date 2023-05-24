@@ -43,16 +43,41 @@ function loadUsers() {
 
       let select = document.getElementById('cityInput');
 
-
       cities.forEach(city => {
         let option = document.createElement('option');
         option.value = city.id;
         option.text = city.name;
-  
+
         select.appendChild(option);
       });
     })
-};
+    const saveButton = document.getElementById('saveUser');
+
+    
+    saveButton.addEventListener('click', function() {
+      
+      const url = 'SiteData.json'; 
+      const fileName = 'SiteData-1.json'; 
+  
+      downloadFile(url, fileName);
+    });
+  
+    
+    function downloadFile(url, fileName) {
+      fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
+        .then(res => res.blob())
+        .then(res => {
+          const aElement = document.createElement('a');
+          aElement.setAttribute('download', fileName);
+          const href = URL.createObjectURL(res);
+          aElement.href = href;
+          aElement.setAttribute('target', '_blank');
+          aElement.click();
+          URL.revokeObjectURL(href);
+        });
+    }
+
+  };
 
 function getMaxId() {
   let maxId = 0;
@@ -134,6 +159,7 @@ function showEditUserPopup(userId) {
     document.getElementById("editModalUser").textContent = "Edit user";
     document.getElementById("popup").style.display = "block";
     document.getElementById("cityInput").value = user.city;
+    document.getElementById("isAdminInput").value = user.isAdmin;
     let saveButton = document.querySelector('#buttonModale');
     const newSaveButton = saveButton.cloneNode(true);
     saveButton.replaceWith(newSaveButton);
@@ -153,6 +179,7 @@ function saveUser(userId) {
   const nameInput = document.querySelector('#nameInput');
   const birthdayInput = document.querySelector('#birthdayInput');
   const cityInput = document.querySelector('#cityInput');
+  const isAdminInput = document.querySelector('#isAdminInput');
   const table = document.querySelector('#table');
   const row = table.rows[userId];
   if (row) {
@@ -161,11 +188,19 @@ function saveUser(userId) {
     const birthdayCell = row.querySelector(`td[name="userBirthday"]`);
     birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
     const cityCell = row.querySelector(`td[name="userCity"]`);
-    cityCell.textContent = cityInput.value;
+    const cityId = parseInt(cityInput.value);
+    const city = cities.find(c => c.id === cityId);
+    if (city) {
+      cityCell.textContent = city.name;
+    } else {
+      cityCell.textContent = '';
+    }
+    // cityCell.textContent = cityInput.value;
     const user = users.find(u => u.id === userId);
     user.name = nameInput.value;
     user.birthday = birthdayInput.value;
     user.city = cityInput.value;
+    user.isAdmin = isAdminInput.checked;
     console.log(users);
   }
   else {
@@ -225,11 +260,13 @@ function deleteUser(userId) {
   }
 }
 
-let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users));
-let dlAnchorElem = document.getElementById('downloadUsers');
-dlAnchorElem.setAttribute("href",     dataStr     );
-dlAnchorElem.setAttribute("download", "SiteData.json");
-dlAnchorElem.click();
+function downloadData() {
+  let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users));
+  let dlAnchorElem = document.getElementById('downloadUsers');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "SiteData.json");
+  dlAnchorElem.click();
+}
 
 $(document).ready(function () {
 
