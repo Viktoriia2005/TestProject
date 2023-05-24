@@ -51,30 +51,6 @@ function loadUsers() {
         select.appendChild(option);
       });
     })
-  const saveButton = document.getElementById('saveUser');
-
-  saveButton.addEventListener('click', function () {
-
-    const url = 'SiteData.json';
-    const fileName = 'SiteData-1.json';
-
-    downloadFile(url, fileName);
-  });
-
-
-  function downloadFile(url, fileName) {
-    fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-      .then(res => res.blob())
-      .then(res => {
-        const aElement = document.createElement('a');
-        aElement.setAttribute('download', fileName);
-        const href = URL.createObjectURL(res);
-        aElement.href = href;
-        aElement.setAttribute('target', '_blank');
-        aElement.click();
-        URL.revokeObjectURL(href);
-      });
-  }
 
 };
 
@@ -117,7 +93,8 @@ function addUser() {
 
   const newCell4 = newRow.insertCell(3);
   newCell4.setAttribute('name', 'userCity');
-  let cityData = cities.find(city => city.id === Number(city));
+  const cityId = Number(city);
+  const cityData = cities.find(city => city.id === cityId);
   const newText4 = document.createTextNode(cityData.name);
   newCell4.appendChild(newText4);
 
@@ -166,13 +143,28 @@ function showEditUserPopup(userId) {
     newSaveButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
-
-
-
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
   }
+}
+
+const saveButtonUser = document.getElementById('saveUser');
+const newSaveUser = saveButtonUser.cloneNode(true);
+saveButtonUser.replaceWith(newSaveUser);
+newSaveUser.addEventListener('click', downloadData);
+
+function downloadData() {
+  let data = {
+    users: users,
+    cities: cities
+  };
+
+  let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+  let dlAnchorElem = document.getElementById('downloadUsers');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "SiteData.json");
+  dlAnchorElem.click();
 }
 
 function saveUser(userId) {
@@ -195,7 +187,6 @@ function saveUser(userId) {
     } else {
       cityCell.textContent = '';
     }
-    // cityCell.textContent = cityInput.value;
     const user = users.find(u => u.id === userId);
     user.name = nameInput.value;
     user.birthday = birthdayInput.value;
@@ -258,14 +249,6 @@ function deleteUser(userId) {
   else {
     console.log(`Can not find user with id = ${userId}`);
   }
-}
-
-function downloadData() {
-  let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users));
-  let dlAnchorElem = document.getElementById('downloadUsers');
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", "SiteData.json");
-  dlAnchorElem.click();
 }
 
 $(document).ready(function () {
