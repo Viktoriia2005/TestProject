@@ -10,6 +10,7 @@ function loadUsers() {
     .then(data => {
       users = data.users;
       cities = data.cities;
+      cities.sort((a, b) => a.name.localeCompare(b.name));
       // console.log(cities);
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
@@ -26,7 +27,8 @@ function loadUsers() {
         birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
         const cityCell = row.insertCell();
         cityCell.setAttribute('name', 'userCity');
-        cityCell.textContent = user.city;
+        let cityData = cities.find(city => city.id === user.city);
+        cityCell.textContent = cityData ? cityData.name : '';
         const actionsCell = row.insertCell();
         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
       }
@@ -38,6 +40,17 @@ function loadUsers() {
       addButton.removeEventListener('click', addUser);
       addButton.removeEventListener('click', saveUser);
       addButton.addEventListener('click', addUser);
+
+      let select = document.getElementById('cityInput');
+
+
+      cities.forEach(city => {
+        let option = document.createElement('option');
+        option.value = city.id;
+        option.text = city.name;
+  
+        select.appendChild(option);
+      });
     })
 };
 
@@ -120,6 +133,7 @@ function showEditUserPopup(userId) {
     document.getElementById("buttonModale").textContent = "Save user";
     document.getElementById("editModalUser").textContent = "Edit user";
     document.getElementById("popup").style.display = "block";
+    document.getElementById("cityInput").value = user.city;
     let saveButton = document.querySelector('#buttonModale');
     const newSaveButton = saveButton.cloneNode(true);
     saveButton.replaceWith(newSaveButton);
@@ -127,22 +141,8 @@ function showEditUserPopup(userId) {
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
 
-    let select = document.getElementById('cityInput');
 
-    cities.sort((a, b) => a.name.localeCompare(b.name));
 
-    cities.forEach(city => {
-      let option = document.createElement('option');
-      option.value = city.id;
-      option.text = city.name;
-
-      select.appendChild(option);
-    });
-    document.getElementById("cityInput").value = user.city;
-    let userCityId = user.city;
-    let cityData = cities.find(city => city.id === userCityId);
-    let userCityCell = document.querySelector('td[name="userCity"]');
-    userCityCell.textContent = cityData ? cityData.name : '';
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
@@ -224,6 +224,12 @@ function deleteUser(userId) {
     console.log(`Can not find user with id = ${userId}`);
   }
 }
+
+let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users));
+let dlAnchorElem = document.getElementById('downloadUsers');
+dlAnchorElem.setAttribute("href",     dataStr     );
+dlAnchorElem.setAttribute("download", "SiteData.json");
+dlAnchorElem.click();
 
 $(document).ready(function () {
 
