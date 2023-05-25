@@ -67,7 +67,7 @@ body {
     font-style: italic;
     font-size: 15pt;
     color: black;
-    background-color: PowderBlue;
+    background-color: powderblue;
     font-weight: bold;
     padding: 0px;
     margin-bottom: 0;
@@ -127,29 +127,29 @@ body {
     display: inline-block;
 }
 
+
 /* footer */
 
 .footer {
+    width: 100%;
     position: absolute;
     top: 250%;
     background: PowderBlue;
-    color: Snow;
-    font-size: 14px;
+    color: black;
+    font-size: 18pt;
     padding: 60px 0 20px;
 }
 
 .footer p {
-    color: Snow;
+    color: black;
 }
 
 .footer h3 {
-    color: Snow;
+    color: black;
     margin-bottom: 20px;
 }
 
-.footer-col-1,
-.footer-col-2,
-.footer-col-3 {
+.footer-col-1 {
     min-width: 250px;
     margin-bottom: 20px;
 }
@@ -158,21 +158,27 @@ body {
     flex-basis: 25%;
 }
 
-.footer-col-2 {
+.footer-col-1 {
     flex: 1;
     text-align: center;
 }
 
-.footer-col-2 img {
-    width: 100px;
-    margin-bottom: 20px;
-}
-
-.footer-col-3 {
+.footer-col-1 {
     flex-basis: 12%;
     text-align: center;
 }
 
 ul {
     list-style-type: none;
+}
+
+.footer hr {
+    border: 1px solid whitesmoke;
+    background: whitesmoke;
+    height: 1px;
+    margin: 20px 0;
+}
+
+.copyright {
+    text-align: center;
 }

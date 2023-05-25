@@ -1,0 +1,51 @@
+<html>
+<link rel="stylesheet" href="styles.css">
+
+
+<body>
+  <h2>JavaScript Array.forEach()</h2>
+  <p>Calls a function once for each array element.</p>
+
+  <p id="demo"></p>
+
+  <script>
+    const numbers = [45, 4, 9, 16, 25];
+
+    let txt = "";
+    numbers.forEach(myFunction);
+    document.getElementById("demo").innerHTML = txt;
+
+    function myFunction(value) {
+      txt += value + "<br>";
+    }
+  </script>
+  <!-- <table border="2" cellpadding="2" cellspacing="5">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>City</th>
+        <th>&#10004;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Vivi</td>
+        <td>Witch</td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="trigger">Click here to trigger the modal!</button>
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <p>You realle delet user?</p>
+      <button class="trigger" onclick="newUser">Yes</button>
+      <button class="trigger" onclick="newUser">No</button>
+    </div>
+  </div> -->
+  <script src="app.js"></script>
+</body>
+
+</html>
