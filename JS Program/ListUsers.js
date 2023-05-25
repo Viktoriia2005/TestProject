@@ -161,7 +161,7 @@ function downloadData() {
   };
 
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-  const dlAnchorElem = document.getElementById('downloadUsers');
+  const dlAnchorElem = document.getElementById('downloadUsersLink');
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute("download", "SiteData.json");
   dlAnchorElem.click();
