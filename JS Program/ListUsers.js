@@ -155,13 +155,13 @@ saveButtonUser.replaceWith(newSaveUser);
 newSaveUser.addEventListener('click', downloadData);
 
 function downloadData() {
-  let data = {
+  const data = {
     users: users,
     cities: cities
   };
 
-  let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-  let dlAnchorElem = document.getElementById('downloadUsers');
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+  const dlAnchorElem = document.getElementById('downloadUsers');
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute("download", "SiteData.json");
   dlAnchorElem.click();
