@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 15px;
 }
@@ -68,7 +68,7 @@ body {
     font-style: italic;
     font-size: 15pt;
     color: black;
-    background-color: limegreen;
+    /* background-color: limegreen; */
     font-weight: bold;
     padding: 0px;
     margin-bottom: 0;
@@ -122,6 +122,13 @@ body {
     transition: transform 0.5s;
 }
 
+.col-1 h4 {
+    display: inline-block;
+    text-decoration: none;
+    list-style: none;
+    color: black;
+}
+
 .row-2 {
     justify-content: space-between;
     margin: 100px auto 50px;
@@ -153,6 +160,13 @@ select:focus {
 
 .page-btn span:hover {
     background: limegreen;
+    color: black;
+}
+
+.page-btn a {
+    display: inline-block;
+    text-decoration: none;
+    list-style: none;
     color: black;
 }
 

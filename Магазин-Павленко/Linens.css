@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 15px;
 }
@@ -67,7 +67,7 @@ body {
     font-style: italic;
     font-size: 15pt;
     color: black;
-    background-color: skyblue;
+    /* background-color: skyblue; */
     font-weight: bold;
     padding: 0px;
     margin-bottom: 0;
@@ -158,6 +158,13 @@ select:focus {
 
 .page-btn span:hover {
     background: skyblue;
+    color: black;
+}
+
+.page-btn a {
+    display: inline-block;
+    text-decoration: none;
+    list-style: none;
     color: black;
 }
 

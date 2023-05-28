@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 15px;
 }
@@ -67,7 +67,7 @@ body {
     font-style: italic;
     font-size: 15pt;
     color: black;
-    background-color: PowderBlue;
+    /* background-color: PowderBlue; */
     font-weight: bold;
     padding: 0px;
     margin-bottom: 0;
@@ -149,7 +149,7 @@ select:focus {
 
 .page-btn span {
     display: inline-block;
-    border: 1px solid #f5d9f5;
+    border: 1px solid PowderBlue;
     margin-left: 10px;
     width: 40px;
     height: 40px;
@@ -159,8 +159,15 @@ select:focus {
 }
 
 .page-btn span:hover {
-    background: #f5d9f5;
-    color: #C71585;
+    background: PowderBlue;
+    color: black;
+}
+
+.page-btn a {
+    display: inline-block;
+    text-decoration: none;
+    list-style: none;
+    color: black;
 }
 
 .small-container-2 {
