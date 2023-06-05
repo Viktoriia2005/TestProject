@@ -25,6 +25,19 @@ var server = http.createServer(function (req, res) {   //create web server
         res.end();
 
     }
+    else if (req.url == "/users") {
+        fs.readFile('data/users.json', 'utf8', (err, data) => {
+            if (err) {
+                console.error('Помилка при читанні файлу:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+                return;
+            }
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(data);
+        });
+    }
     else
         res.end('Invalid Request!');
 
