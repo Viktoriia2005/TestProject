@@ -1,48 +1,57 @@
-var http = require('http'); // Import Node.js core module
+const http = require('http');
+const fs = require('fs');
 
-var server = http.createServer(function (req, res) {   //create web server
-    if (req.url == '/') { //check the URL of the current request
+const server = http.createServer((req, res) => {
+    // Function to set the response content and end the response
+    const sendResponse = (statusCode, contentType, content) => {
+        res.writeHead(statusCode, { 'Content-Type': contentType });
+        res.end(content);
+    };
 
-        // set response header
-        res.writeHead(200, { 'Content-Type': 'text/html' });
+    // Function to handle the home page
+    const handleHome = () => {
+        const content = '<html><body><p>This is home Page.</p></body></html>';
+        sendResponse(200, 'text/html', content);
+    };
 
-        // set response content    
-        res.write('<html><body><p>This is home Page.</p></body></html>');
-        res.end();
+    // Function to handle the student page
+    const handleStudent = () => {
+        const content = '<html><body><p>This is student Page.</p></body></html>';
+        sendResponse(200, 'text/html', content);
+    };
 
-    }
-    else if (req.url == "/student") {
+    // Function to handle the admin page
+    const handleAdmin = () => {
+        const content = '<html><body><p>This is admin Page.</p></body></html>';
+        sendResponse(200, 'text/html', content);
+    };
 
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write('<html><body><p>This is student Page.</p></body></html>');
-        res.end();
-
-    }
-    else if (req.url == "/admin") {
-
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write('<html><body><p>This is admin Page.</p></body></html>');
-        res.end();
-
-    }
-    else if (req.url == "/users") {
-        fs.readFile('data/users.json', 'utf8', (err, data) => {
+    // Function to handle the users page
+    const handleUsers = () => {
+        fs.readFile('SiteData.json', 'utf8', (err, data) => {
             if (err) {
                 console.error('Помилка при читанні файлу:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
+                sendResponse(500, 'text/plain', 'Internal Server Error');
                 return;
             }
 
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(data);
+            sendResponse(200, 'application/json', data);
         });
-    }
-    else
-        res.end('Invalid Request!');
+    };
 
+    // Route handling
+    if (req.url === '/') {
+        handleHome();
+    } else if (req.url === '/student') {
+        handleStudent();
+    } else if (req.url === '/admin') {
+        handleAdmin();
+    } else if (req.url === '/users') {
+        handleUsers();
+    } else {
+        sendResponse(404, 'text/plain', 'Invalid Request!');
+    }
 });
 
-server.listen(5000); //6 - listen for any incoming requests
-
-console.log('Node.js web server at port 5000 is running..')
+server.listen(5000);
+console.log('Node.js web server at port 5000 is running..');
