@@ -1,4 +1,5 @@
-import { sendResponse } from "./utils";
+import { sendResponse } from "./utils.js";
+
 
     export function handleUsers (res) {
         fs.readFile('SiteData.json', 'utf8', (err, data) => {
