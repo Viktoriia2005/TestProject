@@ -4,7 +4,7 @@ import { handleStudent } from './student.js';
 import { handleAdmin } from './admin.js';
 import { handleUsers } from './users.js';
 import { handleCalc } from './calculator.js';
-
+import { sendResponse } from './utils.js';
 
 const server = http.createServer((req, res) => {
 
@@ -22,19 +22,7 @@ const server = http.createServer((req, res) => {
         handleUsers(res);
     }
     else if (req.url === '/calc' && req.method === 'POST') {
-        let body = '';
-
-        req.on('data', (chunk) => {
-            body += chunk;
-        });
-
-        req.on('end', () => {
-            const requestBody = JSON.parse(body);
-            const param1 = parseInt(req.url.split('=')[1]);
-            const param2 = requestBody.param2;
-
-            handleCalc(param1, param2);
-        });
+        handleCalc(req, res);
     }
     else {
         sendResponse(404, 'text/plain', 'Invalid Request!');
