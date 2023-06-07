@@ -21,7 +21,7 @@ const server = http.createServer((req, res) => {
     else if (req.url === '/users' && req.method === 'GET') {
         handleUsers(res);
     }
-    else if (req.url.match(/\/calc\?param1=\d+/) && req.method === 'POST') {
+    else if (req.url.match(/\/calc(\?(\w+=\w+&)*\w+=\w+)?/) && req.method === 'POST') {
         handleCalc(req, res);
     }    
     else {
