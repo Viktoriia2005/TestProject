@@ -9,23 +9,23 @@ import { sendResponse } from './utils.js';
 const server = http.createServer((req, res) => {
 
     // Route handling
-    if (req.url === '/') {
+    if (req.url === '/' && req.method === 'GET') {
         handleHome(res);
     }
-    else if (req.url === '/student') {
+    else if (req.url === '/student' && req.method === 'GET') {
         handleStudent(res);
     }
-    else if (req.url === '/admin') {
+    else if (req.url === '/admin' && req.method === 'GET') {
         handleAdmin(res);
     }
-    else if (req.url === '/users') {
+    else if (req.url === '/users' && req.method === 'GET') {
         handleUsers(res);
     }
-    else if (req.url === '/calc' && req.method === 'POST') {
+    else if (req.url.match(/\/calc\?param1=\d+/) && req.method === 'POST') {
         handleCalc(req, res);
-    }
+    }    
     else {
-        sendResponse(404, 'text/plain', 'Invalid Request!');
+        sendResponse(res, 404, 'text/plain', 'Invalid Request!');
     }
 });
 
