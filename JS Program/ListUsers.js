@@ -5,18 +5,14 @@ function loadUsers() {
   const button = document.querySelector('#myButton');
   button.disabled = true;
   button.textContent = 'Loading...';
-
-  fetch('http://localhost:5000/users')
+  fetch('SiteData.json')
     .then(response => response.json())
     .then(data => {
-      const users = data.users;
-      const cities = data.cities;
+      users = data.users;
+      cities = data.cities;
       cities.sort((a, b) => a.name.localeCompare(b.name));
-
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
-      tbody.innerHTML = ''; // Очистити таблицю перед заповненням новими даними
-
       for (const user of users) {
         const row = tbody.insertRow();
         row.setAttribute('id', 'userRow-' + user.id);
@@ -33,7 +29,7 @@ function loadUsers() {
         let cityData = cities.find(city => city.id === user.city);
         cityCell.textContent = cityData ? cityData.name : '';
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
       }
 
       button.disabled = true;
@@ -53,8 +49,10 @@ function loadUsers() {
 
         select.appendChild(option);
       });
-    });
-}
+    })
+
+};
+
 
 function getMaxId() {
   let maxId = 0;
