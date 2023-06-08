@@ -1,5 +1,6 @@
 import { handleHome } from './home.js';
 import * as http from 'http';
+import * as url from 'url';
 import { handleStudent } from './student.js';
 import { handleAdmin } from './admin.js';
 import { handleUsers } from './users.js';
@@ -7,6 +8,7 @@ import { handleCalc } from './calculator.js';
 import { sendResponse } from './utils.js';
 
 const server = http.createServer((req, res) => {
+    const requestUrl = url.parse(req.url, true);
 
     // Route handling
     if (req.url === '/' && req.method === 'GET') {
@@ -21,7 +23,7 @@ const server = http.createServer((req, res) => {
     else if (req.url === '/users' && req.method === 'GET') {
         handleUsers(res);
     }
-    else if (req.url.match(/\/calc(\?(\w+=\w+&)*\w+=\w+)?/) && req.method === 'POST') {
+    else if (requestUrl.pathname === '/calc' && req.method === 'POST') {
         handleCalc(req, res);
     }    
     else {
