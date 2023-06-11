@@ -2,7 +2,7 @@ import { sendResponse } from "./utils.js";
 import fs from 'fs';
 
 export function handleUsers(res) {
-    fs.readFile('SiteData.json', 'utf8', (err, data) => {
+    fs.readFile('users.json', 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading file:', err);
             sendResponse(res, 500, 'text/plain', 'Internal Server Error');
