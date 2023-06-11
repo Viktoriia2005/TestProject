@@ -22,5 +22,5 @@ app.get("/user/:id/:start/:end", function (req, res) {
 
 app.listen(PORT, function (error) {
     if (error) throw error
-    console.log("Server created Successfully on PORT", PORT)
+    console.log("Server created Successfully on PORT", PORT);
 })
