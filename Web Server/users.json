@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Viktoriia Pavlenko",
+      "birthday": "2005-11-16",
+      "city": 326,
+      "isAdmin": true
+    },
+    {
+      "id": 2,
+      "name": "Marina Lavrenyuk",
+      "birthday": "2005-10-06",
+      "city": 326,
+      "isAdmin": false
+    },
+    {
+      "id": 3,
+      "name": "Daria Lyashuk",
+      "birthday": "2005-09-14",
+      "city": 326,
+      "isAdmin": false
+    },
+    {
+      "id": 4,
+      "name": "Kirill Sukhoi",
+      "birthday": "2005-10-01",
+      "city": 326,
+      "isAdmin": false
+    }
+  ]
+}
