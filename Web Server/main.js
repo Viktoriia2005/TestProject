@@ -1,8 +1,9 @@
 import { handleUsers } from './users.js';
-import { handleUserById } from './User by id.js';
-import { handleNewUser } from './New user.js';
-import { handleEditUser } from './Edit user.js';
-import { handleDeleteUser } from './Delete user.js';
+import { handleUserById } from './users.js';
+import { handleNewUser } from './users.js';
+import { handleEditUser } from './users.js';
+import { handleDeleteUser } from './users.js';
+import { handleCities } from './cities.js';
 import express from 'express';
 
 const app = express();
@@ -12,6 +13,10 @@ var PORT = process.env.PORT || 5000;
 
 app.get("/users", function (req, res) {
     handleUsers(res);
+});
+
+app.get("/cities", function (req, res) {
+    handleCities(res);
 });
 
 // GET user by ID
@@ -38,4 +43,3 @@ app.listen(PORT, function (error) {
     if (error) throw error;
     console.log("Server created Successfully on PORT", PORT);
 });
-
