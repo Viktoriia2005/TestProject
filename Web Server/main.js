@@ -5,9 +5,15 @@ import { handleEditUser } from './users.js';
 import { handleDeleteUser } from './users.js';
 import { handleCities } from './cities.js';
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+// const cors=cors();
+
+app.use(cors({
+    origin: '*'
+}));
 
 var PORT = process.env.PORT || 5000;
 
