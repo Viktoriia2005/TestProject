@@ -13,8 +13,7 @@ export function handleCities(res) {
         }
 
         try {
-            const jsonData = JSON.parse(data);
-            const citiesArray = jsonData;
+            const citiesArray = JSON.parse(data);
 
             sendResponse(res, 200, 'application/json', JSON.stringify(citiesArray));
         } catch (error) {

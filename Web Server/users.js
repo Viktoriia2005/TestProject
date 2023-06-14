@@ -13,8 +13,7 @@ export function handleUsers(res) {
         }
 
         try {
-            const jsonData = JSON.parse(data);
-            const usersArray = jsonData;
+            const usersArray = JSON.parse(data);
 
             sendResponse(res, 200, 'application/json', JSON.stringify(usersArray));
         } catch (error) {
