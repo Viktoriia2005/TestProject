@@ -5,11 +5,13 @@ function loadUsers() {
   const button = document.querySelector('#myButton');
   button.disabled = true;
   button.textContent = 'Loading...';
-  fetch('SiteData.json')
-    .then(response => response.json())
-    .then(data => {
-      users = data.users;
-      cities = data.cities;
+  Promise.all([
+    fetch('http://localhost:5000/users').then(response => response.json()),
+    fetch('http://localhost:5000/cities').then(response => response.json())
+  ])
+    .then(([userData, cityData]) => {
+      const users = userData;
+      const cities = cityData;
       cities.sort((a, b) => a.name.localeCompare(b.name));
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
@@ -29,7 +31,7 @@ function loadUsers() {
         let cityData = cities.find(city => city.id === user.city);
         cityCell.textContent = cityData ? cityData.name : '';
         const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id = "Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = "Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
       }
 
       button.disabled = true;
@@ -49,10 +51,22 @@ function loadUsers() {
 
         select.appendChild(option);
       });
-    })
+    });
+}
 
-};
-
+function showAddUserPopup() {
+  document.querySelector('#nameInput').value = '';
+  document.querySelector('#birthdayInput').value = '';
+  document.querySelector('#cityInput').value = '';
+  let addButton = document.querySelector('#buttonModale');
+  const newAddButton = addButton.cloneNode(true);
+  addButton.replaceWith(newAddButton);
+  newAddButton.addEventListener('click', () => addUser());
+  document.getElementById("buttonModale").textContent = "Add user";
+  document.getElementById("editModalUser").textContent = "Add new user";
+  let popup = document.getElementById("editUserModal");
+  popup.classList.toggle("show");
+}
 
 function getMaxId() {
   let maxId = 0;
@@ -122,15 +136,19 @@ function addUser() {
 
 function showEditUserPopup(userId) {
   const user = users.find(u => u.id === userId);
-  if (user) {
-    console.log(user);
-
-    // use user data here
-    document.getElementById("nameInput").value = user.name;
-    document.getElementById("birthdayInput").value = user.birthday;
-    document.getElementById("cityInput").value = user.city;
-    document.getElementById("isAdminInput").checked = user.isAdmin;
-
+  if (!user) {
+    // Fetch user data from the server
+    fetch(`http://localhost:5000/users/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // use user data here
+        document.getElementById("nameInput").value = data.name;
+        document.getElementById("birthdayInput").value = data.birthday;
+        document.getElementById("cityInput").value = data.city;
+        document.getElementById("isAdminInput").checked = data.isAdmin;
+      });
+  } else {
     // Change the text and show the popup
     document.getElementById("buttonModale").textContent = "Save user";
     document.getElementById("editModalUser").textContent = "Edit user";
@@ -143,6 +161,93 @@ function showEditUserPopup(userId) {
     newSaveButton.addEventListener('click', () => saveUser(userId));
     let popup = document.getElementById("editUserModal");
     popup.classList.toggle("show");
+  }
+  console.log(`Can not find user with id = ${userId}`);
+}
+
+
+function saveUser(userId) {
+  const nameInput = document.querySelector('#nameInput');
+  const birthdayInput = document.querySelector('#birthdayInput');
+  const cityInput = document.querySelector('#cityInput');
+  const isAdminInput = document.querySelector('#isAdminInput');
+  const table = document.querySelector('#table');
+  const row = table.rows[userId];
+  if (row) {
+    const nameCell = row.querySelector(`td[name="userName"]`);
+    nameCell.textContent = nameInput.value;
+    const birthdayCell = row.querySelector(`td[name="userBirthday"]`);
+    birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
+    const cityCell = row.querySelector(`td[name="userCity"]`);
+    const cityId = parseInt(cityInput.value);
+    let city = null;
+    // Fetch city data from the server
+    fetch(`http://localhost:5000/cities`)
+      .then(response => response.json())
+      .then(data => {
+        city = data.find(c => c.id === cityId);
+        if (city) {
+          cityCell.textContent = city.name;
+        } else {
+          cityCell.textContent = '';
+        }
+      })
+      .catch(error => console.log(error));
+
+    if (city) {
+      cityCell.textContent = city.name;
+    } else {
+      cityCell.textContent = '';
+    }
+    const user = users.find(u => u.id === userId);
+    user.name = nameInput.value;
+    user.birthday = birthdayInput.value;
+    user.city = cityInput.value;
+    user.isAdmin = isAdminInput.checked;
+    console.log(users);
+  }
+  else {
+    console.log(`Can not find user with id = ${userId}`);
+  }
+  const modal = document.querySelector('#editUserModal');
+  $(modal).modal('hide');
+}
+
+function showDeleteUserPopup(userId) {
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    console.log(user);
+
+    const modalWindow = document.querySelector('#staticBackdrop');
+    const modalBody = modalWindow.querySelector('.modal-body');
+    modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
+
+    let deleteButton = document.querySelector('#popupDelete');
+    const newDeleteButton = deleteButton.cloneNode(true);
+    deleteButton.replaceWith(newDeleteButton);
+    newDeleteButton.addEventListener('click', () => deleteUser(userId));
+
+    let popup = document.getElementById("staticBackdrop");
+    popup.classList.toggle("show");
+
+    const link = document.createElement('a');
+    link.href = `http://localhost:5000/users/${userId}`;
+    link.textContent = 'User details';
+    modalBody.appendChild(link);
+  }
+  else {
+    console.log(`Can not find user with id = ${userId}`);
+  }
+}
+
+function deleteUser(userId) {
+  const userIndex = users.findIndex(u => u.id === userId);
+  if (userIndex !== -1) {
+    users.splice(userIndex, 1);
+    console.log(`User with id = ${userId} was deleted`);
+    const rowId = `userRow-${userId}`;
+    const row = document.getElementById(rowId);
+    row.remove();
   }
   else {
     console.log(`Can not find user with id = ${userId}`);
@@ -165,90 +270,6 @@ function downloadData() {
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute("download", "SiteData.json");
   dlAnchorElem.click();
-}
-
-function saveUser(userId) {
-  const nameInput = document.querySelector('#nameInput');
-  const birthdayInput = document.querySelector('#birthdayInput');
-  const cityInput = document.querySelector('#cityInput');
-  const isAdminInput = document.querySelector('#isAdminInput');
-  const table = document.querySelector('#table');
-  const row = table.rows[userId];
-  if (row) {
-    const nameCell = row.querySelector(`td[name="userName"]`);
-    nameCell.textContent = nameInput.value;
-    const birthdayCell = row.querySelector(`td[name="userBirthday"]`);
-    birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
-    const cityCell = row.querySelector(`td[name="userCity"]`);
-    const cityId = parseInt(cityInput.value);
-    const city = cities.find(c => c.id === cityId);
-    if (city) {
-      cityCell.textContent = city.name;
-    } else {
-      cityCell.textContent = '';
-    }
-    const user = users.find(u => u.id === userId);
-    user.name = nameInput.value;
-    user.birthday = birthdayInput.value;
-    user.city = cityInput.value;
-    user.isAdmin = isAdminInput.checked;
-    console.log(users);
-  }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
-  const modal = document.querySelector('#editUserModal');
-  $(modal).modal('hide');
-
-}
-
-function showAddUserPopup() {
-  document.querySelector('#nameInput').value = '';
-  document.querySelector('#birthdayInput').value = '';
-  document.querySelector('#cityInput').value = '';
-  let addButton = document.querySelector('#buttonModale');
-  const newAddButton = addButton.cloneNode(true);
-  addButton.replaceWith(newAddButton);
-  newAddButton.addEventListener('click', () => addUser());
-  document.getElementById("buttonModale").textContent = "Add user";
-  document.getElementById("editModalUser").textContent = "Add new user";
-  let popup = document.getElementById("editUserModal");
-  popup.classList.toggle("show");
-}
-
-function showDeleteUserPopup(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    console.log(user);
-
-    const modalWindow = document.querySelector('#staticBackdrop');
-    const modalBody = modalWindow.querySelector('.modal-body');
-    modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
-
-    let deleteButton = document.querySelector('#popupDelete');
-    const newDeleteButton = deleteButton.cloneNode(true);
-    deleteButton.replaceWith(newDeleteButton);
-    newDeleteButton.addEventListener('click', () => deleteUser(userId));
-    let popup = document.getElementById("staticBackdrop");
-    popup.classList.toggle("show");
-  }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
-}
-
-function deleteUser(userId) {
-  const userIndex = users.findIndex(u => u.id === userId);
-  if (userIndex !== -1) {
-    users.splice(userIndex, 1);
-    console.log(`User with id = ${userId} was deleted`);
-    const rowId = `userRow-${userId}`;
-    const row = document.getElementById(rowId);
-    row.remove();
-  }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
 }
 
 $(document).ready(function () {
