@@ -10,8 +10,8 @@ function loadUsers() {
     fetch('http://localhost:5000/cities').then(response => response.json())
   ])
     .then(([userData, cityData]) => {
-      const users = userData;
-      const cities = cityData;
+       users = userData;
+       cities = cityData;
       cities.sort((a, b) => a.name.localeCompare(b.name));
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
@@ -35,7 +35,7 @@ function loadUsers() {
       }
 
       button.disabled = true;
-      button.textContent = 'Cannot add users';
+      button.textContent = 'Cannot load users';
 
       const addButton = document.querySelector('#buttonModale');
       addButton.removeEventListener('click', addUser);
@@ -135,8 +135,8 @@ function addUser() {
 }
 
 function showEditUserPopup(userId) {
-  const user = users.find(u => u.id === userId);
-  if (!user) {
+  let user = users.find(u => u.id === userId);
+  if (user) {
     // Fetch user data from the server
     fetch(`http://localhost:5000/users/${userId}`)
       .then(response => response.json())
@@ -199,7 +199,7 @@ function saveUser(userId) {
     } else {
       cityCell.textContent = '';
     }
-    const user = users.find(u => u.id === userId);
+    let user = users.find(u => u.id === userId);
     user.name = nameInput.value;
     user.birthday = birthdayInput.value;
     user.city = cityInput.value;
