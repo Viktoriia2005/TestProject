@@ -147,22 +147,22 @@ function showEditUserPopup(userId) {
         document.getElementById("birthdayInput").value = data.birthday;
         document.getElementById("cityInput").value = data.city;
         document.getElementById("isAdminInput").checked = data.isAdmin;
+
+        // Show the popup
+        document.getElementById("buttonModale").textContent = "Save user";
+        document.getElementById("editModalUser").textContent = "Edit user";
+        document.getElementById("popup").style.display = "block";
+
+        // Replace save button with a cloned button
+        let saveButton = document.querySelector('#buttonModale');
+        const newSaveButton = saveButton.cloneNode(true);
+        saveButton.replaceWith(newSaveButton);
+        newSaveButton.addEventListener('click', () => saveUser(userId));
+
+        let popup = document.getElementById("editUserModal");
+        popup.classList.toggle("show");
       });
-  } else {
-    // Change the text and show the popup
-    document.getElementById("buttonModale").textContent = "Save user";
-    document.getElementById("editModalUser").textContent = "Edit user";
-    document.getElementById("popup").style.display = "block";
-    document.getElementById("cityInput").value = user.city;
-    document.getElementById("isAdminInput").value = user.isAdmin;
-    let saveButton = document.querySelector('#buttonModale');
-    const newSaveButton = saveButton.cloneNode(true);
-    saveButton.replaceWith(newSaveButton);
-    newSaveButton.addEventListener('click', () => saveUser(userId));
-    let popup = document.getElementById("editUserModal");
-    popup.classList.toggle("show");
   }
-  console.log(`Can not find user with id = ${userId}`);
 }
 
 
