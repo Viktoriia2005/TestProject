@@ -10,8 +10,8 @@ function loadUsers() {
     fetch('http://localhost:5000/cities').then(response => response.json())
   ])
     .then(([userData, cityData]) => {
-       users = userData;
-       cities = cityData;
+      users = userData;
+      cities = cityData;
       cities.sort((a, b) => a.name.localeCompare(b.name));
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
@@ -82,57 +82,58 @@ function addUser() {
   const name = document.querySelector('#nameInput').value;
   const birthday = document.querySelector('#birthdayInput').value;
   const city = document.querySelector('#cityInput').value;
-  const tmp = document.getElementById("buttonModale");
-  console.log(tmp);
-  const maxId = getMaxId();
-  const id = maxId + 1;
 
-  const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
-  const newRow = tableRef.insertRow();
-  newRow.id = 'user' + id;
+  // Створіть новий користувач
+  const newUser = {
+    name: name,
+    birthday: birthday,
+    city: city
+  };
 
-  const newCell = newRow.insertCell(0);
-  const newText = document.createTextNode(id);
-  newCell.appendChild(newText);
+  // Відправити POST-запит на сервер для збереження користувача
+  fetch('http://localhost:5000/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newUser, null, 2)
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Збережений користувач успішно, оновити таблицю на стороні клієнта
+      const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
+      const newRow = tableRef.insertRow();
 
-  const newCell2 = newRow.insertCell(1);
-  newCell2.setAttribute('name', 'userName');
-  const newText2 = document.createTextNode(name);
-  newCell2.appendChild(newText2);
+      const idCell = newRow.insertCell(0);
+      const idText = document.createTextNode(data.id); // Отримати ID, яке повернув сервер
+      idCell.appendChild(idText);
 
-  const newCell3 = newRow.insertCell(2);
-  newCell3.setAttribute('name', 'userBirthday');
-  const newText3 = document.createTextNode(birthday);
-  newCell3.appendChild(newText3);
+      const nameCell = newRow.insertCell(1);
+      const nameText = document.createTextNode(data.name); // Отримати ім'я, яке повернув сервер
+      nameCell.appendChild(nameText);
 
-  const newCell4 = newRow.insertCell(3);
-  newCell4.setAttribute('name', 'userCity');
-  const cityId = Number(city);
-  const cityData = cities.find(city => city.id === cityId);
-  const newText4 = document.createTextNode(cityData.name);
-  newCell4.appendChild(newText4);
+      const birthdayCell = newRow.insertCell(2);
+      const birthdayText = document.createTextNode(data.birthday); // Отримати день народження, яке повернув сервер
+      birthdayCell.appendChild(birthdayText);
 
-  // Update maxId value
-  const updatedMaxId = maxId + 1;
+      const cityCell = newRow.insertCell(3);
+      const cityText = document.createTextNode(data.city); // Отримати місто, яке повернув сервер
+      cityCell.appendChild(cityText);
 
-  // Update users with a new user
-  const newUser = { id: updatedMaxId, name, birthday, city };
-  users.push(newUser);
+      // Очистити поля вводу
+      document.querySelector('#nameInput').value = '';
+      document.querySelector('#birthdayInput').value = '';
+      document.querySelector('#cityInput').value = '';
 
-  // Reset Input Field Values
-  document.querySelector('#nameInput').value = '';
-  document.querySelector('#birthdayInput').value = '';
-  document.querySelector('#cityInput').value = '';
-
-  // Update row id of table
-  newRow.setAttribute('id', 'userRow-' + updatedMaxId);
-
-  // Add action buttons for a new user
-  const actionsCell = newRow.insertCell();
-  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${updatedMaxId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${updatedMaxId})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
-  const modal = document.querySelector('#editUserModal');
-  $(modal).modal('hide');
+      // Повідомлення про успішне збереження
+      console.log('User saved successfully:', data);
+    })
+    .catch(error => {
+      // Помилка збереження користувача
+      console.error('Error saving user:', error);
+    });
 }
+
 
 function showEditUserPopup(userId) {
   let user = users.find(u => u.id === userId);
@@ -180,37 +181,40 @@ function saveUser(userId) {
     birthdayCell.textContent = new Date(birthdayInput.value).toLocaleDateString('uk-UA');
     const cityCell = row.querySelector(`td[name="userCity"]`);
     const cityId = parseInt(cityInput.value);
-    let city = null;
-    // Fetch city data from the server
-    fetch(`http://localhost:5000/cities`)
-      .then(response => response.json())
-      .then(data => {
-        city = data.find(c => c.id === cityId);
-        if (city) {
-          cityCell.textContent = city.name;
-        } else {
-          cityCell.textContent = '';
-        }
-      })
-      .catch(error => console.log(error));
 
-    if (city) {
-      cityCell.textContent = city.name;
-    } else {
-      cityCell.textContent = '';
-    }
-    let user = users.find(u => u.id === userId);
-    user.name = nameInput.value;
-    user.birthday = birthdayInput.value;
-    user.city = cityInput.value;
-    user.isAdmin = isAdminInput.checked;
-    console.log(users);
+    let city = cityInput.value; // Значення, введене користувачем у полі вводу city
+
+    // Prepare the user data to be sent to the server
+    const userData = {
+      name: nameInput.value,
+      birthday: birthdayInput.value,
+      city: city,
+      isAdmin: isAdminInput.checked
+    };
+
+    // Send the user data to the server using fetch
+    fetch(`http://localhost:5000/users/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
+    })
+      .then(response => response.json())
+      .then(updatedData => {
+        console.log(updatedData);
+        // Update the table with the updated data
+        nameCell.textContent = updatedData.name;
+        birthdayCell.textContent = new Date(updatedData.birthday).toLocaleDateString('uk-UA');
+        cityCell.textContent = updatedData.city;
+        // Hide the popup
+        const modal = document.querySelector('#editUserModal');
+        $(modal).modal('hide');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
-  const modal = document.querySelector('#editUserModal');
-  $(modal).modal('hide');
 }
 
 function showDeleteUserPopup(userId) {
@@ -265,7 +269,7 @@ function downloadData() {
     cities: cities
   };
 
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
   const dlAnchorElem = document.getElementById('downloadUsersLink');
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute("download", "SiteData.json");
