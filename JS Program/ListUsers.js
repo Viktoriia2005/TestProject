@@ -120,6 +120,9 @@ function addUser() {
       const cityText = document.createTextNode(data.city);
       cityCell.appendChild(cityText);
 
+      const actionsCell = newRow.insertCell(4);
+      actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${newUser.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${newUser.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+
       // Clear input fields
       document.querySelector('#nameInput').value = '';
       document.querySelector('#birthdayInput').value = '';
@@ -133,7 +136,6 @@ function addUser() {
       console.error('Error saving user:', error);
     });
 }
-
 
 function showEditUserPopup(userId) {
   let user = users.find(u => u.id === userId);
@@ -165,7 +167,6 @@ function showEditUserPopup(userId) {
       });
   }
 }
-
 
 function saveUser(userId) {
   const nameInput = document.querySelector('#nameInput');
@@ -234,36 +235,40 @@ function showDeleteUserPopup(userId) {
     const modalBody = modalWindow.querySelector('.modal-body');
     modalBody.innerHTML = `<p>Do you really want to delete the ${user.name}?</p>`;
 
-    let deleteButton = document.querySelector('#popupDelete');
-    const newDeleteButton = deleteButton.cloneNode(true);
-    deleteButton.replaceWith(newDeleteButton);
-    newDeleteButton.addEventListener('click', () => deleteUser(userId));
+    const deleteButton = document.querySelector('#popupDelete');
+    deleteButton.addEventListener('click', () => {
+      deleteUser(userId);
+    });
 
-    let popup = document.getElementById("staticBackdrop");
-    popup.classList.toggle("show");
+    const popup = document.getElementById('staticBackdrop');
+    popup.classList.toggle('show');
 
     const link = document.createElement('a');
     link.href = `http://localhost:5000/users/${userId}`;
     link.textContent = 'User details';
     modalBody.appendChild(link);
-  }
-  else {
+  } else {
     console.log(`Can not find user with id = ${userId}`);
   }
 }
 
 function deleteUser(userId) {
-  const userIndex = users.findIndex(u => u.id === userId);
-  if (userIndex !== -1) {
-    users.splice(userIndex, 1);
-    console.log(`User with id = ${userId} was deleted`);
-    const rowId = `userRow-${userId}`;
-    const row = document.getElementById(rowId);
-    row.remove();
-  }
-  else {
-    console.log(`Can not find user with id = ${userId}`);
-  }
+  fetch(`http://localhost:5000/users/${userId}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log(`User with id = ${userId} was deleted`);
+        const rowId = `userRow-${userId}`;
+        const row = document.getElementById(rowId);
+        row.remove();
+      } else {
+        console.log(`Error deleting user with id = ${userId}`);
+      }
+    })
+    .catch(error => {
+      console.log(`Error deleting user with id = ${userId}: ${error}`);
+    });
 }
 
 const saveButtonUser = document.getElementById('saveUser');

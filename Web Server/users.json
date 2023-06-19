@@ -4,14 +4,16 @@
     "name": "Viktoriia Pavlenko",
     "birthday": "2005-11-16",
     "city": 326,
-    "isAdmin": true
+    "isAdmin": true,
+    "cityId": 326
   },
   {
     "id": 2,
     "name": "Marina Lavrenyuk",
     "birthday": "2005-10-06",
     "city": 326,
-    "isAdmin": false
+    "isAdmin": false,
+    "cityId": 326
   },
   {
     "id": 3,
@@ -40,5 +42,26 @@
     "city": 326,
     "isAdmin": false,
     "id": 6
+  },
+  {
+    "name": "Tymofiy Bozhko",
+    "birthday": "12.12.2005",
+    "city": 326,
+    "id": 7,
+    "isAdmin": false
+  },
+  {
+    "name": "Yana Hajchina",
+    "birthday": "06.07.2006",
+    "city": 326,
+    "id": 8,
+    "isAdmin": false
+  },
+  {
+    "name": "Dmitry Rak",
+    "birthday": "08.08.2006",
+    "city": 326,
+    "id": 9,
+    "isAdmin": true
   }
 ]
