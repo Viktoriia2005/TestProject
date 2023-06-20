@@ -34,3 +34,7 @@
   margin: 3;
   padding: 2;
 }
+
+.material-symbols-outlined{
+  cursor: pointer;
+}
