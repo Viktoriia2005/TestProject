@@ -18,7 +18,7 @@
   {
     "id": 3,
     "name": "Daria Lyashuk",
-    "birthday": "2005-09-14",
+    "birthday": "14.09.2005",
     "city": 326,
     "isAdmin": false
   },
@@ -62,6 +62,12 @@
     "birthday": "08.08.2006",
     "city": 326,
     "id": 9,
-    "isAdmin": true
+    "isAdmin": false
+  },
+  {
+    "name": "Alina Poltavchenko155",
+    "birthday": "20.06.2023",
+    "city": 67,
+    "id": 10
   }
 ]

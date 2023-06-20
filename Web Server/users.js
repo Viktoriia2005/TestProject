@@ -83,7 +83,7 @@ export function handleNewUser(req, res) {
                     return;
                 }
 
-                res.status(201).json(newUser);
+                res.status(201).json({ id: newUser.id });
             });
 
         } catch (error) {
