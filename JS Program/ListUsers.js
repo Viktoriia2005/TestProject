@@ -6,63 +6,56 @@ let dataLoaded = false;
 function loadUsers() {
   const button = document.querySelector('#myButton');
   button.disabled = true;
-  button.innerHTML = '<span class="material-symbols-outlined">autorenew</span>';
+  button.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
 
-  if (!dataLoaded) {
-    Promise.all([
-      fetch('http://localhost:5000/users').then(response => response.json()),
-      fetch('http://localhost:5000/cities').then(response => response.json())
-    ])
-      .then(([userData, cityData]) => {
-        users = userData;
-        cities = cityData;
-        cities.sort((a, b) => a.name.localeCompare(b.name));
-        const table = document.querySelector('#table');
-        const tbody = table.querySelector('tbody');
-        for (const user of users) {
-          const row = tbody.insertRow();
-          row.setAttribute('id', 'userRow-' + user.id);
-          const idCell = row.insertCell();
-          idCell.textContent = user.id;
-          const nameCell = row.insertCell();
-          nameCell.setAttribute('name', 'userName');
-          nameCell.textContent = user.name;
-          const birthdayCell = row.insertCell();
-          birthdayCell.setAttribute('name', 'userBirthday');
-          birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
-          const cityCell = row.insertCell();
-          cityCell.setAttribute('name', 'userCity');
-          let cityData = cities.find(city => city.id === user.city);
-          cityCell.textContent = cityData ? cityData.name : '';
-          const isAdminCell = row.insertCell();
-          isAdminCell.setAttribute('name', 'userIsAdmin');
-          isAdminCell.textContent = user.isAdmin ? 'true' : 'false';
-          const actionsCell = row.insertCell();
-          actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
-        }
+  Promise.all([
+    fetch('http://localhost:5000/users').then(response => response.json()),
+    fetch('http://localhost:5000/cities').then(response => response.json())
+  ])
+    .then(([userData, cityData]) => {
+      // Оновити дані користувачів та міст
+      users = userData;
+      cities = cityData;
+      cities.sort((a, b) => a.name.localeCompare(b.name));
+      const table = document.querySelector('#table');
+      const tbody = table.querySelector('tbody');
+      // Очистити таблицю перед додаванням оновлених даних
+      tbody.innerHTML = '';
+      for (const user of users) {
+        // Додати рядок з користувачем до таблиці
+        const row = tbody.insertRow();
+        row.setAttribute('id', 'userRow-' + user.id);
+        // Додати комірки з даними користувача
+        const idCell = row.insertCell();
+        idCell.textContent = user.id;
+        const nameCell = row.insertCell();
+        nameCell.setAttribute('name', 'userName');
+        nameCell.textContent = user.name;
+        const birthdayCell = row.insertCell();
+        birthdayCell.setAttribute('name', 'userBirthday');
+        birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
+        const cityCell = row.insertCell();
+        cityCell.setAttribute('name', 'userCity');
+        let cityData = cities.find(city => city.id === user.city);
+        cityCell.textContent = cityData ? cityData.name : '';
+        const isAdminCell = row.insertCell();
+        isAdminCell.setAttribute('name', 'userIsAdmin');
+        isAdminCell.textContent = user.isAdmin ? 'true' : 'false';
+        const actionsCell = row.insertCell();
+        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+      }
 
-        dataLoaded = true;
+      dataLoaded = true;
 
-        button.disabled = true;
-        button.innerHTML = '<span class="material-symbols-outlined">autorenew</span>';
-
-        const addButton = document.querySelector('#buttonModale');
-        addButton.removeEventListener('click', addUser);
-        addButton.removeEventListener('click', saveUser);
-        addButton.addEventListener('click', addUser);
-
-        let select = document.getElementById('cityInput');
-
-        cities.forEach(city => {
-          let option = document.createElement('option');
-          option.value = city.id;
-          option.text = city.name;
-
-          select.appendChild(option);
-        });
-      });
-  }
+      button.disabled = false;
+      button.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
+    });
 }
+document.addEventListener('DOMContentLoaded', loadUsers);
+
+// Оновити дані при кліку на кнопку "refresh"
+const refreshButton = document.querySelector('#myButton');
+refreshButton.addEventListener('click', loadUsers);
 
 function showAddUserPopup() {
   document.querySelector('#nameInput').value = '';
@@ -90,8 +83,7 @@ function getMaxId() {
 
 function formatDate(dateString) {
   const [day, month, year] = dateString.split('.');
-  const date = new Date(`${year}-${month}-${day}`);
-  return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'numeric', year: 'numeric' });
+  return `${day}.${month}.${year}`;
 }
 
 function addUser() {
@@ -100,13 +92,11 @@ function addUser() {
   const city = parseInt(document.querySelector('#cityInput').value);
 
   // Create a new user
-  const formattedBirthday = formatDate(birthday);
   const newUser = {
     name: name,
-    birthday: formattedBirthday,
+    birthday: birthday,
     city: city
   };
-  
 
   // Send POST request to server to save user
   fetch('http://localhost:5000/users', {
@@ -145,17 +135,6 @@ function addUser() {
       const actionsCell = newRow.insertCell(5);
       actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${data.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${data.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
 
-      // Fetch the newly created user
-      fetch(`http://localhost:5000/users/${data.id}`)
-        .then(response => response.json())
-        .then(user => {
-          // Display the user's information
-          console.log('New user:', user);
-        })
-        .catch(error => {
-          console.error('Error fetching new user:', error);
-        });
-
       // Clear input fields
       document.querySelector('#nameInput').value = '';
       document.querySelector('#birthdayInput').value = '';
@@ -193,21 +172,32 @@ function showEditUserPopup(userId) {
         let saveButton = document.querySelector('#buttonModale');
         const newSaveButton = saveButton.cloneNode(true);
         saveButton.replaceWith(newSaveButton);
-        newSaveButton.addEventListener('click', () => saveUser(userId));
 
         let popup = document.getElementById("editUserModal");
         popup.classList.toggle("show");
+
+        // Fetch city data from the server and populate the cityInput dropdown
+        fetch(`http://localhost:5000/cities`)
+          .then(response => response.json())
+          .then(cityData => {
+            const cityInput = document.getElementById("cityInput");
+            cityData.forEach(city => {
+              const option = document.createElement("option");
+              option.value = city.id;
+              option.textContent = city.name;
+              cityInput.appendChild(option);
+            });
+
+            newSaveButton.addEventListener('click', () => saveUser(userId, cityData)); // Pass cityData as an argument
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       });
   }
 }
 
-function formatDate(dateString) {
-  const [day, month, year] = dateString.split('.');
-  const date = new Date(`${year}-${month}-${day}`);
-  return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'numeric', year: 'numeric' });
-}
-
-function saveUser(userId) {
+function saveUser(userId, cityData) {
   const nameInput = document.querySelector('#nameInput');
   const birthdayInput = document.querySelector('#birthdayInput');
   const cityInput = document.querySelector('#cityInput');
@@ -222,53 +212,44 @@ function saveUser(userId) {
     const cityCell = row.querySelector(`td[name="userCity"]`);
     const cityId = parseInt(cityInput.value, 10);
 
-    // Send a separate request to get the city name by cityId
-    fetch(`http://localhost:5000/cities`)
+    const cityName = cityData.find(city => city.id === cityId)?.name; // Get the name of the city based on cityId
+
+    // Prepare the user data to be sent to the server
+    const userData = {
+      name: nameInput.value,
+      birthday: birthdayInput.value,
+      city: cityId,
+      isAdmin: isAdminInput.checked
+    };
+
+    // Send the user data to the server using fetch
+    fetch(`http://localhost:5000/users/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData, null, 2)
+    })
       .then(response => response.json())
-      .then(cityData => {
-        const cityName = cityData.find(city => city.id === cityId)?.name; // Get the name of the city based on cityId
+      .then(updatedData => {
+        console.log(updatedData);
+        // Update the table with the updated data
+        nameCell.textContent = updatedData.name;
+        birthdayCell.textContent = formatDate(updatedData.birthday); // Format the birthday
+        cityCell.textContent = cityName; // Use the city name
 
-        // Prepare the user data to be sent to the server
-        const userData = {
-          name: nameInput.value,
-          birthday: birthdayInput.value,
-          city: cityId,
-          isAdmin: isAdminInput.checked
-        };
+        const isAdminCell = row.querySelector(`td[name="userIsAdmin"]`);
+        isAdminCell.textContent = updatedData.isAdmin ? 'true' : 'false';
 
-        // Send the user data to the server using fetch
-        fetch(`http://localhost:5000/users/${userId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(userData, null, 2)
-        })
-          .then(response => response.json())
-          .then(updatedData => {
-            console.log(updatedData);
-            // Update the table with the updated data
-            nameCell.textContent = updatedData.name;
-            birthdayCell.textContent = formatDate(updatedData.birthday); // Format the birthday
-            cityCell.textContent = cityName; // Use the city name
-
-            const isAdminCell = row.querySelector(`td[name="userIsAdmin"]`);
-            isAdminCell.textContent = updatedData.isAdmin ? 'true' : 'false';
-
-            // Hide the popup
-            const modal = document.querySelector('#editUserModal');
-            $(modal).modal('hide');
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
+        // Hide the popup
+        const modal = document.querySelector('#editUserModal');
+        $(modal).modal('hide');
       })
       .catch(error => {
         console.error('Error:', error);
       });
   }
 }
-
 
 function showDeleteUserPopup(userId) {
   const user = users.find(u => u.id === userId);
