@@ -1,7 +1,6 @@
 let users;
 let cities;
 
-let dataLoaded = false;
 
 function loadUsers() {
   const button = document.querySelector('#myButton');
@@ -13,19 +12,19 @@ function loadUsers() {
     fetch('http://localhost:5000/cities').then(response => response.json())
   ])
     .then(([userData, cityData]) => {
-      // Оновити дані користувачів та міст
+      // Update user and city data
       users = userData;
       cities = cityData;
       cities.sort((a, b) => a.name.localeCompare(b.name));
       const table = document.querySelector('#table');
       const tbody = table.querySelector('tbody');
-      // Очистити таблицю перед додаванням оновлених даних
+      // Clear table before adding updated data
       tbody.innerHTML = '';
       for (const user of users) {
-        // Додати рядок з користувачем до таблиці
+        // Add a row with a user to a table
         const row = tbody.insertRow();
         row.setAttribute('id', 'userRow-' + user.id);
-        // Додати комірки з даними користувача
+        // Add cells with user data
         const idCell = row.insertCell();
         idCell.textContent = user.id;
         const nameCell = row.insertCell();
@@ -33,14 +32,22 @@ function loadUsers() {
         nameCell.textContent = user.name;
         const birthdayCell = row.insertCell();
         birthdayCell.setAttribute('name', 'userBirthday');
-        birthdayCell.textContent = new Date(user.birthday).toLocaleDateString('uk-UA');
+
+        // Convert date to format dd.mm.yyyy
+        const birthday = new Date(user.birthday);
+        const day = String(birthday.getDate()).padStart(2, '0');
+        const month = String(birthday.getMonth() + 1).padStart(2, '0');
+        const year = birthday.getFullYear();
+        const formattedBirthday = `${day}.${month}.${year}`;
+
+        birthdayCell.textContent = formattedBirthday;
         const cityCell = row.insertCell();
         cityCell.setAttribute('name', 'userCity');
         let cityData = cities.find(city => city.id === user.city);
         cityCell.textContent = cityData ? cityData.name : '';
         const isAdminCell = row.insertCell();
         isAdminCell.setAttribute('name', 'userIsAdmin');
-        isAdminCell.textContent = user.isAdmin ? 'true' : 'false';
+        isAdminCell.innerHTML = user.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '';
         const actionsCell = row.insertCell();
         actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
       }
@@ -51,8 +58,6 @@ function loadUsers() {
       button.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
     });
 }
-document.addEventListener('DOMContentLoaded', loadUsers);
-
 // Оновити дані при кліку на кнопку "refresh"
 const refreshButton = document.querySelector('#myButton');
 refreshButton.addEventListener('click', loadUsers);
@@ -65,10 +70,26 @@ function showAddUserPopup() {
   const newAddButton = addButton.cloneNode(true);
   addButton.replaceWith(newAddButton);
   newAddButton.addEventListener('click', () => addUser());
-  document.getElementById("buttonModale").innerHTML = '<span class="material-symbols-outlined">add</span>';
+  document.getElementById("buttonModale").textContent = "Add user";
   document.getElementById("editModalUser").textContent = "Add new user";
   let popup = document.getElementById("editUserModal");
   popup.classList.toggle("show");
+
+  // Fetch city data from the server and populate the cityInput dropdown
+  fetch(`http://localhost:5000/cities`)
+    .then(response => response.json())
+    .then(cityData => {
+      const cityInput = document.getElementById("cityInput");
+      cityData.forEach(city => {
+        const option = document.createElement("option");
+        option.value = city.id;
+        option.textContent = city.name;
+        cityInput.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function getMaxId() {
@@ -82,14 +103,14 @@ function getMaxId() {
 }
 
 function formatDate(dateString) {
-  const [day, month, year] = dateString.split('.');
-  return `${day}.${month}.${year}`;
+  const [year, month, day] = dateString.split('-');
+  return `${year}.${month}.${day}`;
 }
 
 function addUser() {
   const name = document.querySelector('#nameInput').value;
   const birthday = document.querySelector('#birthdayInput').value;
-  const city = parseInt(document.querySelector('#cityInput').value);
+  const city = document.querySelector('#cityInput').value;
 
   // Create a new user
   const newUser = {
@@ -98,13 +119,16 @@ function addUser() {
     city: city
   };
 
+  // Convert user data to JSON
+  const jsonData = JSON.stringify(newUser);
+
   // Send POST request to server to save user
   fetch('http://localhost:5000/users', {
     method: 'POST',
+    body: jsonData,
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newUser, null, 2)
+    }
   })
     .then(response => response.json())
     .then(data => {
@@ -125,11 +149,31 @@ function addUser() {
       birthdayCell.appendChild(birthdayText);
 
       const cityCell = newRow.insertCell(3);
-      const cityText = document.createTextNode(data.city);
-      cityCell.appendChild(cityText);
+      const citySelect = document.createElement('select'); // Create select element
+      citySelect.disabled = true; // Disable the select element initially
+
+      // Fetch city data from the server and populate the citySelect dropdown
+      fetch('http://localhost:5000/cities')
+        .then(response => response.json())
+        .then(cityData => {
+          cityData.forEach(cityOption => {
+            const option = document.createElement('option');
+            option.value = cityOption.id;
+            option.textContent = cityOption.name;
+            citySelect.appendChild(option);
+          });
+
+          citySelect.value = data.city; // Set the selected city
+
+          cityCell.appendChild(citySelect); // Append select element to cell
+          citySelect.disabled = false; // Enable the select element
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
 
       const isAdminCell = newRow.insertCell(4);
-      const isAdminText = document.createTextNode(data.isAdmin ? 'true' : 'false');
+      const isAdminText = document.createTextNode(data.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '');
       isAdminCell.appendChild(isAdminText);
 
       const actionsCell = newRow.insertCell(5);
@@ -164,7 +208,7 @@ function showEditUserPopup(userId) {
         document.getElementById("isAdminInput").checked = data.isAdmin;
 
         // Show the popup
-        document.getElementById("buttonModale").innerHTML = '<span class="material-symbols-outlined">save</span>';
+        document.getElementById("buttonModale").textContent = "Save user";
         document.getElementById("editModalUser").textContent = "Edit user";
         document.getElementById("popup").style.display = "block";
 
@@ -214,10 +258,10 @@ function saveUser(userId, cityData) {
 
     const cityName = cityData.find(city => city.id === cityId)?.name; // Get the name of the city based on cityId
 
-    // Prepare the user data to be sent to the server
+    // Prepare user data as an object
     const userData = {
       name: nameInput.value,
-      birthday: birthdayInput.value,
+      birthday: formatDate(birthdayInput.value), // Format the birthday
       city: cityId,
       isAdmin: isAdminInput.checked
     };
@@ -228,7 +272,7 @@ function saveUser(userId, cityData) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(userData, null, 2)
+      body: JSON.stringify(userData)
     })
       .then(response => response.json())
       .then(updatedData => {
@@ -239,7 +283,7 @@ function saveUser(userId, cityData) {
         cityCell.textContent = cityName; // Use the city name
 
         const isAdminCell = row.querySelector(`td[name="userIsAdmin"]`);
-        isAdminCell.textContent = updatedData.isAdmin ? 'true' : 'false';
+        isAdminCell.innerHTML = updatedData.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '';
 
         // Hide the popup
         const modal = document.querySelector('#editUserModal');
@@ -295,24 +339,6 @@ function deleteUser(userId) {
     });
 }
 
-// const saveButtonUser = document.getElementById('saveUser');
-// const newSaveUser = saveButtonUser.cloneNode(true);
-// saveButtonUser.replaceWith(newSaveUser);
-// newSaveUser.addEventListener('click', downloadData);
-
-// function downloadData() {
-//   const data = {
-//     users: users,
-//     cities: cities
-//   };
-
-//   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-//   const dlAnchorElem = document.getElementById('downloadUsersLink');
-//   dlAnchorElem.setAttribute("href", dataStr);
-//   dlAnchorElem.setAttribute("download", "SiteData.json");
-//   dlAnchorElem.click();
-// }
-
 $(document).ready(function () {
   let userLang = navigator.language || navigator.userLanguage;
   let langCode = userLang.toLowerCase();
@@ -329,4 +355,5 @@ $(document).ready(function () {
       dateFormat: "dd.mm.yy"
     });
   }
+  loadUsers();
 });
