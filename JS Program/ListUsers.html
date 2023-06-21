@@ -17,8 +17,8 @@
 <body>
   <div class="navigation">
     <span id="myButton" onclick="loadUsers()" class="material-symbols-outlined">refresh</span>
-    <button type="button" onclick="showAddUserPopup()" id="popup" class="btn btn-primary" data-bs-toggle="modal"
-      data-bs-target="#editUserModal">New</button>
+    <span onclick="showAddUserPopup()" id="popup" data-bs-toggle="modal" data-bs-target="#editUserModal"
+      class="material-symbols-outlined">add</span>
     <a id="downloadUsersLink" style="display: none;"></a>
   </div>
   <!-- Modal -->
@@ -37,7 +37,7 @@
           </select>
         </div>
         <div class="modal-footer">
-          <span id="buttonModale" class="material-symbols-outlined">add</span>
+          <button type="button" id="buttonModale" class="btn btn-primary">Add user</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
