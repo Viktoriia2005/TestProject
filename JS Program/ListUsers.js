@@ -102,15 +102,20 @@ function getMaxId() {
   return maxId;
 }
 
-function formatDate(dateString) {
-  const [year, month, day] = dateString.split('-');
-  return `${year}.${month}.${day}`;
-}
-
 function addUser() {
   const name = document.querySelector('#nameInput').value;
-  const birthday = document.querySelector('#birthdayInput').value;
-  const city = document.querySelector('#cityInput').value;
+  const jsDate = $('#birthdayInput').datepicker('getDate');
+  let birthday;
+  if (jsDate !== null) {
+    jsDate instanceof Date;
+    const day = jsDate.getDate();
+    const month = jsDate.getMonth() + 1; // Month is zero-based, so add 1
+    const year = jsDate.getFullYear();
+    birthday = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  } else {
+    birthday = '';
+  }
+  const city = parseInt(document.querySelector('#cityInput').value, 10);
 
   // Create a new user
   const newUser = {
@@ -120,7 +125,7 @@ function addUser() {
   };
 
   // Convert user data to JSON
-  const jsonData = JSON.stringify(newUser);
+  const jsonData = JSON.stringify(newUser, null, 2);
 
   // Send POST request to server to save user
   fetch('http://localhost:5000/users', {
@@ -131,53 +136,33 @@ function addUser() {
     }
   })
     .then(response => response.json())
-    .then(data => {
-      // Saved user successfully refreshes client-side table
+    .then(newUser => {
+      // Використовуйте newUser для оновлення таблиці
       const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
       const newRow = tableRef.insertRow();
 
       const idCell = newRow.insertCell(0);
-      const idText = document.createTextNode(data.id);
+      const idText = document.createTextNode(newUser.id);
       idCell.appendChild(idText);
 
       const nameCell = newRow.insertCell(1);
-      const nameText = document.createTextNode(data.name);
+      const nameText = document.createTextNode(newUser.name);
       nameCell.appendChild(nameText);
 
       const birthdayCell = newRow.insertCell(2);
-      const birthdayText = document.createTextNode(formatDate(data.birthday)); // Format the birthday
+      const birthdayText = document.createTextNode(birthday);
       birthdayCell.appendChild(birthdayText);
 
       const cityCell = newRow.insertCell(3);
-      const citySelect = document.createElement('select'); // Create select element
-      citySelect.disabled = true; // Disable the select element initially
-
-      // Fetch city data from the server and populate the citySelect dropdown
-      fetch('http://localhost:5000/cities')
-        .then(response => response.json())
-        .then(cityData => {
-          cityData.forEach(cityOption => {
-            const option = document.createElement('option');
-            option.value = cityOption.id;
-            option.textContent = cityOption.name;
-            citySelect.appendChild(option);
-          });
-
-          citySelect.value = data.city; // Set the selected city
-
-          cityCell.appendChild(citySelect); // Append select element to cell
-          citySelect.disabled = false; // Enable the select element
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+      const cityText = document.createTextNode(city);
+      cityCell.appendChild(cityText);
 
       const isAdminCell = newRow.insertCell(4);
-      const isAdminText = document.createTextNode(data.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '');
+      const isAdminText = document.createTextNode(newUser.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '');
       isAdminCell.appendChild(isAdminText);
 
       const actionsCell = newRow.insertCell(5);
-      actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${data.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${data.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+      actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${newUser.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${newUser.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
 
       // Clear input fields
       document.querySelector('#nameInput').value = '';
@@ -185,7 +170,7 @@ function addUser() {
       document.querySelector('#cityInput').value = '';
 
       // Successful saving message
-      console.log('User saved successfully:', data);
+      console.log('User saved successfully:', newUser);
     })
     .catch(error => {
       // User retention failed
@@ -203,7 +188,15 @@ function showEditUserPopup(userId) {
         console.log(data);
         // use user data here
         document.getElementById("nameInput").value = data.name;
-        document.getElementById("birthdayInput").value = data.birthday;
+
+        // Format birthday to "DD.MM.YYYY" format
+        const birthdayParts = data.birthday.split('-');
+        const year = birthdayParts[0];
+        const month = birthdayParts[1];
+        const day = birthdayParts[2];
+        const formattedBirthday = `${day}.${month}.${year}`;
+        document.getElementById("birthdayInput").value = formattedBirthday;
+
         document.getElementById("cityInput").value = data.city;
         document.getElementById("isAdminInput").checked = data.isAdmin;
 
@@ -241,9 +234,24 @@ function showEditUserPopup(userId) {
   }
 }
 
+function formatDate(date) {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${day < 10 ? '0' + day : day}.${month < 10 ? '0' + month : month}.${year}`;
+}
+
+
 function saveUser(userId, cityData) {
   const nameInput = document.querySelector('#nameInput');
-  const birthdayInput = document.querySelector('#birthdayInput');
+  const jsDate = $('#birthdayInput').datepicker('getDate');
+  let birthday = '';
+  if (jsDate !== null) {
+    const day = jsDate.getDate();
+    const month = jsDate.getMonth() + 1;
+    const year = jsDate.getFullYear();
+    birthday = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  }
   const cityInput = document.querySelector('#cityInput');
   const isAdminInput = document.querySelector('#isAdminInput');
   const table = document.querySelector('#table');
@@ -252,21 +260,19 @@ function saveUser(userId, cityData) {
     const nameCell = row.querySelector(`td[name="userName"]`);
     nameCell.textContent = nameInput.value;
     const birthdayCell = row.querySelector(`td[name="userBirthday"]`);
-    birthdayCell.textContent = formatDate(birthdayInput.value); // Format the birthday
+    birthdayCell.textContent = formatDate(jsDate);
     const cityCell = row.querySelector(`td[name="userCity"]`);
     const cityId = parseInt(cityInput.value, 10);
 
-    const cityName = cityData.find(city => city.id === cityId)?.name; // Get the name of the city based on cityId
+    const cityName = cityData.find(city => city.id === cityId)?.name;
 
-    // Prepare user data as an object
     const userData = {
       name: nameInput.value,
-      birthday: formatDate(birthdayInput.value), // Format the birthday
+      birthday: birthday,
       city: cityId,
       isAdmin: isAdminInput.checked
     };
 
-    // Send the user data to the server using fetch
     fetch(`http://localhost:5000/users/${userId}`, {
       method: 'PUT',
       headers: {
@@ -277,15 +283,13 @@ function saveUser(userId, cityData) {
       .then(response => response.json())
       .then(updatedData => {
         console.log(updatedData);
-        // Update the table with the updated data
         nameCell.textContent = updatedData.name;
-        birthdayCell.textContent = formatDate(updatedData.birthday); // Format the birthday
-        cityCell.textContent = cityName; // Use the city name
+        birthdayCell.textContent = formatDate(new Date(updatedData.birthday));
+        cityCell.textContent = cityName;
 
         const isAdminCell = row.querySelector(`td[name="userIsAdmin"]`);
         isAdminCell.innerHTML = updatedData.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '';
 
-        // Hide the popup
         const modal = document.querySelector('#editUserModal');
         $(modal).modal('hide');
       })
