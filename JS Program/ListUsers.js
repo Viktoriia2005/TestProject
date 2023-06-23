@@ -23,33 +23,7 @@ function loadUsers() {
       for (const user of users) {
         // Add a row with a user to a table
         const row = tbody.insertRow();
-        row.setAttribute('id', 'userRow-' + user.id);
-        // Add cells with user data
-        const idCell = row.insertCell();
-        idCell.textContent = user.id;
-        const nameCell = row.insertCell();
-        nameCell.setAttribute('name', 'userName');
-        nameCell.textContent = user.name;
-        const birthdayCell = row.insertCell();
-        birthdayCell.setAttribute('name', 'userBirthday');
-
-        // Convert date to format dd.mm.yyyy
-        const birthday = new Date(user.birthday);
-        const day = String(birthday.getDate()).padStart(2, '0');
-        const month = String(birthday.getMonth() + 1).padStart(2, '0');
-        const year = birthday.getFullYear();
-        const formattedBirthday = `${day}.${month}.${year}`;
-
-        birthdayCell.textContent = formattedBirthday;
-        const cityCell = row.insertCell();
-        cityCell.setAttribute('name', 'userCity');
-        let cityData = cities.find(city => city.id === user.city);
-        cityCell.textContent = cityData ? cityData.name : '';
-        const isAdminCell = row.insertCell();
-        isAdminCell.setAttribute('name', 'userIsAdmin');
-        isAdminCell.innerHTML = user.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '';
-        const actionsCell = row.insertCell();
-        actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${user.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${user.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
+        addNewUserRow(row, user.id, user.name, user.birthday, user.city, user.isAdmin);
       }
 
       dataLoaded = true;
@@ -57,6 +31,35 @@ function loadUsers() {
       button.disabled = false;
       button.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
     });
+}
+
+function addNewUserRow(row, userId, userName, userBirthday, userCity, userIsAdmin) {
+  row.setAttribute('id', 'userRow-' + userId);
+  // Add cells with user data
+  const idCell = row.insertCell();
+  idCell.textContent = userId;
+  const nameCell = row.insertCell();
+  nameCell.setAttribute('name', 'userName');
+  nameCell.textContent = userName;
+  const birthdayCell = row.insertCell();
+  birthdayCell.setAttribute('name', 'userBirthday');
+
+  // Convert date to format dd.mm.yyyy
+  const formattedBirthday = formatDate( new Date(userBirthday));
+
+  birthdayCell.textContent = formattedBirthday;
+  const cityCell = row.insertCell();
+  cityCell.setAttribute('name', 'userCity');
+  let cityData = cities.find(city => city.id === userCity);
+  cityCell.textContent = cityData ? cityData.name : '';
+  const isAdminCell = row.insertCell();
+  isAdminCell.setAttribute('name', 'userIsAdmin');
+  isAdminCell.innerHTML = userIsAdmin ? '<span class="material-symbols-outlined">done</span>' : '';
+  const actionsCell = row.insertCell();
+  actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info"` +
+    ` id="Edit" onclick="showEditUserPopup(${userId})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete">` +
+    `<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${userId})">` +
+    `<span class="material-symbols-outlined">delete</span></button></a></div>`;
 }
 
 function showAddUserPopup() {
@@ -141,33 +144,9 @@ function addUser() {
       const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
       const newRow = tableRef.insertRow();
 
-      const idCell = newRow.insertCell(0);
-      const idText = document.createTextNode(newUser.id);
-      idCell.appendChild(idText);
+      addNewUserRow(newRow, newUser.id, newUser.name, birthday, city, newUser.isAdmin);
 
-      const nameCell = newRow.insertCell(1);
-      const nameText = document.createTextNode(newUser.name);
-      nameCell.appendChild(nameText);
-
-      const birthdayCell = newRow.insertCell(2);
-      const birthdayText = document.createTextNode(birthday);
-      birthdayCell.appendChild(birthdayText);
-
-      const cityCell = newRow.insertCell(3);
-      const cityText = document.createTextNode(city);
-      cityCell.appendChild(cityText);
-
-      const isAdminCell = newRow.insertCell(4);
-      const isAdminText = document.createTextNode(newUser.isAdmin ? '<span class="material-symbols-outlined">done</span>' : '');
-      isAdminCell.appendChild(isAdminText);
-
-      const actionsCell = newRow.insertCell(5);
-      actionsCell.innerHTML = `<div class="edit-delet-text"><a title="Edit"><button data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-info" id="Edit" onclick="showEditUserPopup(${newUser.id})"><span class="material-symbols-outlined">edit</span></a></button><a title="Delete"><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="Delete" onclick="showDeleteUserPopup(${newUser.id})"><span class="material-symbols-outlined">delete</span></button></a></div>`;
-
-      // Clear input fields
-      document.querySelector('#nameInput').value = '';
-      document.querySelector('#birthdayInput').value = '';
-      document.querySelector('#cityInput').value = '';
+      clearInputFields();
 
       // Successful saving message
       console.log('User saved successfully:', newUser);
@@ -176,6 +155,13 @@ function addUser() {
       // User retention failed
       console.error('Error saving user:', error);
     });
+}
+
+function clearInputFields() {
+  // Clear input fields
+  document.querySelector('#nameInput').value = '';
+  document.querySelector('#birthdayInput').value = '';
+  document.querySelector('#cityInput').value = '';
 }
 
 function showEditUserPopup(userId) {
@@ -286,6 +272,9 @@ function saveUser(userId, cityData) {
 
         const modal = document.querySelector('#editUserModal');
         $(modal).modal('hide');
+
+        clearInputFields();
+
       })
       .catch(error => {
         console.error('Error:', error);
