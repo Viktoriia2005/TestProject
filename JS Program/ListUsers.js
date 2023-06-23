@@ -58,9 +58,6 @@ function loadUsers() {
       button.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
     });
 }
-// Оновити дані при кліку на кнопку "refresh"
-const refreshButton = document.querySelector('#myButton');
-refreshButton.addEventListener('click', loadUsers);
 
 function showAddUserPopup() {
   document.querySelector('#nameInput').value = '';
@@ -102,19 +99,22 @@ function getMaxId() {
   return maxId;
 }
 
+function getIsoDateString(dateVal) {
+  let isoDate = '';
+  if (dateVal) {
+    const day = dateVal.getDate();
+    const month = dateVal.getMonth() + 1; // Month is zero-based, so add 1
+    const year = dateVal.getFullYear();
+    isoDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  }
+  return isoDate;
+}
+
 function addUser() {
   const name = document.querySelector('#nameInput').value;
   const jsDate = $('#birthdayInput').datepicker('getDate');
-  let birthday;
-  if (jsDate !== null) {
-    jsDate instanceof Date;
-    const day = jsDate.getDate();
-    const month = jsDate.getMonth() + 1; // Month is zero-based, so add 1
-    const year = jsDate.getFullYear();
-    birthday = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
-  } else {
-    birthday = '';
-  }
+  const birthday = getIsoDateString(jsDate);
+
   const city = parseInt(document.querySelector('#cityInput').value, 10);
 
   // Create a new user
@@ -245,13 +245,7 @@ function formatDate(date) {
 function saveUser(userId, cityData) {
   const nameInput = document.querySelector('#nameInput');
   const jsDate = $('#birthdayInput').datepicker('getDate');
-  let birthday = '';
-  if (jsDate !== null) {
-    const day = jsDate.getDate();
-    const month = jsDate.getMonth() + 1;
-    const year = jsDate.getFullYear();
-    birthday = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
-  }
+  const birthday = getIsoDateString(jsDate);
   const cityInput = document.querySelector('#cityInput');
   const isAdminInput = document.querySelector('#isAdminInput');
   const table = document.querySelector('#table');
@@ -359,5 +353,6 @@ $(document).ready(function () {
       dateFormat: "dd.mm.yy"
     });
   }
+
   loadUsers();
 });
