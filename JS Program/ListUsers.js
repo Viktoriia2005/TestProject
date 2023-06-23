@@ -45,7 +45,7 @@ function addNewUserRow(row, userId, userName, userBirthday, userCity, userIsAdmi
   birthdayCell.setAttribute('name', 'userBirthday');
 
   // Convert date to format dd.mm.yyyy
-  const formattedBirthday = formatDate( new Date(userBirthday));
+  const formattedBirthday = formatDate(new Date(userBirthday));
 
   birthdayCell.textContent = formattedBirthday;
   const cityCell = row.insertCell();
@@ -183,7 +183,6 @@ function showEditUserPopup(userId) {
         const formattedBirthday = `${day}.${month}.${year}`;
         document.getElementById("birthdayInput").value = formattedBirthday;
 
-        document.getElementById("cityInput").value = data.city;
         document.getElementById("isAdminInput").checked = data.isAdmin;
 
         // Show the popup
@@ -210,6 +209,7 @@ function showEditUserPopup(userId) {
               option.textContent = city.name;
               cityInput.appendChild(option);
             });
+            cityInput.value = data.city;
 
             newSaveButton.addEventListener('click', () => saveUser(userId, cityData)); // Pass cityData as an argument
           })
