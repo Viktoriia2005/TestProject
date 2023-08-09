@@ -146,6 +146,8 @@ function addUser() {
 
       addNewUserRow(newRow, newUser.id, newUser.name, birthday, city, newUser.isAdmin);
 
+      getUsers()
+
       clearInputFields();
 
       // Successful saving message
@@ -163,6 +165,25 @@ function clearInputFields() {
   document.querySelector('#birthdayInput').value = '';
   document.querySelector('#cityInput').value = '';
 }
+
+// Add this feature to get the list of users and update the table
+function getUsers() {
+  fetch('http://localhost:5000/users')
+    .then(response => response.json())
+    .then(users => {
+      const tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
+      tableRef.innerHTML = ''; // Clear previous data from table
+
+      users.forEach(user => {
+        const newRow = tableRef.insertRow();
+        addNewUserRow(newRow, user.id, user.name, user.birthday, user.city, user.isAdmin);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching users:', error);
+    });
+}
+
 
 function showEditUserPopup(userId) {
   let user = users.find(u => u.id === userId);
@@ -345,3 +366,19 @@ $(document).ready(function () {
 
   loadUsers();
 });
+
+// document.addEventListener("DOMContentLoaded", function () {
+//   const errorButton = document.getElementById("showErrorButton");
+//   const errorMessage = "There was an error in the code."; // Повідомлення про помилку
+
+//   errorButton.addEventListener("click", function () {
+//     const modalTitle = document.getElementById("staticBackdropLabel");
+//     const modalBody = document.querySelector("#staticBackdrop .modal-body p");
+
+//     modalTitle.textContent = "Error";
+//     modalBody.textContent = errorMessage;
+
+//     const modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+//     modal.show();
+//   });
+// });
